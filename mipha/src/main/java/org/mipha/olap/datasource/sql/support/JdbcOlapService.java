@@ -1,17 +1,24 @@
 /*
- * Copyright 2002-2018 the original author or authors.
+ * Copyright (c) 2018-present the original author or authors.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Permission is hereby granted, free of charge, to any person obtaining
+ * a copy of this software and associated documentation files (the
+ * "Software"), to deal in the Software without restriction, including
+ * without limitation the rights to use, copy, modify, merge, publish,
+ * distribute, sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so, subject to
+ * the following conditions:
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+ * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+ * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+ * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 package org.mipha.olap.datasource.sql.support;
@@ -26,7 +33,7 @@ import org.mipha.common.ResponseCodes;
 import org.mipha.olap.OlapService;
 import org.mipha.olap.domain.Connector;
 import org.mipha.olap.domain.Field;
-import org.mipha.olap.domain.TableLike;
+import org.mipha.olap.domain.PhysicalTable;
 import org.mipha.util.DBUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapperResultSetExtractor;
@@ -40,16 +47,16 @@ import org.springframework.jdbc.support.MetaDataAccessException;
  * @author 7cat
  * @since 1.0
  */
-public class JdbcOlapService implements OlapService {
+public class JdbcOlapService implements OlapService<PhysicalTable> {
 
 	private static final String COLUMN_NAME_PATTERN_ANY = "%";
 
 	@Override
-	public List<TableLike> resolveTables(Connector connector) {
+	public List<PhysicalTable> resolveTables(Connector connector) {
 		return extractDatabaseMetaData(connector, (dbmd) -> {
 			try (ResultSet rs = dbmd.getTables(null, null, null,
 					new String[] { Constants.TABLE_TYPE_TABLE, Constants.TABLE_TYPE_VIEW });) {
-				List<TableLike> tables = extractDataSet(rs, TableLike.class);
+				List<PhysicalTable> tables = extractDataSet(rs, PhysicalTable.class);
 				tables.stream().forEach(s -> s.setConnectorId(connector.getId()));
 				return tables;
 			}
@@ -57,10 +64,10 @@ public class JdbcOlapService implements OlapService {
 	}
 
 	@Override
-	public List<Field> resolveFields(Connector connector, TableLike table) {
+	public List<Field> resolveFields(Connector connector, PhysicalTable table) {
 
 		return extractDatabaseMetaData(connector, (bdmd) -> {
- 			try (ResultSet rs = bdmd.getColumns(table.getTableCatalog(), table.getTableSchema(), table.getTableName(),
+			try (ResultSet rs = bdmd.getColumns(table.getTableCatalog(), table.getTableSchema(), table.getTableName(),
 					JdbcOlapService.COLUMN_NAME_PATTERN_ANY);) {
 				return extractDataSet(rs, Field.class);
 			}
@@ -68,12 +75,12 @@ public class JdbcOlapService implements OlapService {
 	}
 
 	@Override
-	public TableLike resolveTable(Connector connector, TableLike table) {
+	public PhysicalTable resolveTable(Connector connector, PhysicalTable table) {
 
 		return extractDatabaseMetaData(connector, (dbmd) -> {
 			try (ResultSet rs = dbmd.getTables(table.getTableCatalog(), table.getTableSchema(), table.getTableName(),
 					new String[] { Constants.TABLE_TYPE_TABLE, Constants.TABLE_TYPE_VIEW });) {
-				TableLike t = extractDataSet(rs, TableLike.class).get(0);
+				PhysicalTable t = extractDataSet(rs, PhysicalTable.class).get(0);
 				t.setConnectorId(connector.getId());
 				try (ResultSet columnRs = dbmd.getColumns(t.getTableCatalog(), t.getTableSchema(), t.getTableName(),
 						JdbcOlapService.COLUMN_NAME_PATTERN_ANY);) {

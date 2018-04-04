@@ -21,27 +21,23 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.mipha.olap.support;
-
-import javax.persistence.AttributeConverter;
-
-import org.mipha.util.JsonUtils;
+package org.mipha.olap.domain;
 
 /**
- * 属性转换器用于实体属性同数据库数据的转换.
+ * 基于查询结果的临时表.
  * 
  * @author 7cat
  * @since 1.0
  */
-public class JsonAttributeConverter implements AttributeConverter<Object, String> {
+public class QueryTable extends TableLike {
 
-	@Override
-	public String convertToDatabaseColumn(Object attribute) {
-		return JsonUtils.marshal(attribute);
+	private String statement;
+
+	public String getStatement() {
+		return statement;
 	}
 
-	@Override
-	public Object convertToEntityAttribute(String data) {
-		return JsonUtils.unmarshal(data);
+	public void setStatement(String statement) {
+		this.statement = statement;
 	}
 }
