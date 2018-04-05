@@ -23,26 +23,46 @@
 
 package org.flora.expression;
 
+import java.util.BitSet;
+
 import org.antlr.v4.runtime.BaseErrorListener;
+import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
+import org.antlr.v4.runtime.atn.ATNConfigSet;
+import org.antlr.v4.runtime.dfa.DFA;
+import org.flora.FloraException;
 
 /**
+ * 语法解析错误监听器,在任何异常出现时都会抛出 {@link FloraException}.
  * 
  * @author 7cat
  * @since 1.0
  */
-public class ErrorListener extends BaseErrorListener {
+public class FloraExpressionErrorListener extends BaseErrorListener {
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.antlr.v4.runtime.BaseErrorListener#syntaxError(org.antlr.v4.runtime.Recognizer, java.lang.Object, int,
-	 * int, java.lang.String, org.antlr.v4.runtime.RecognitionException)
-	 */
 	@Override
 	public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine,
-				String msg, RecognitionException e) {
-		System.out.println("line " + line + ":" + charPositionInLine + " at " + offendingSymbol + ": " + msg);
+			String msg, RecognitionException e) {
+		throw new FloraException(ErrorCodes.EXPRESSION_SYNTAX_ERROR,
+				"line " + line + ":" + charPositionInLine + " at " + offendingSymbol + ": " + msg);
+	}
+	
+	@Override
+	public void reportAmbiguity(Parser recognizer, DFA dfa, int startIndex, int stopIndex, boolean exact,
+			BitSet ambigAlts, ATNConfigSet configs) {
+		System.out.println("reportAmbiguity");
+	}
+	
+	@Override
+	public void reportAttemptingFullContext(Parser recognizer, DFA dfa, int startIndex, int stopIndex,
+			BitSet conflictingAlts, ATNConfigSet configs) {
+		System.out.println("reportAttemptingFullContext");
+	}
+	
+	@Override
+	public void reportContextSensitivity(Parser recognizer, DFA dfa, int startIndex, int stopIndex, int prediction,
+			ATNConfigSet configs) {
+		System.out.println("reportContextSensitivity");
 	}
 }

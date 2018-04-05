@@ -21,19 +21,30 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.flora.expression;
+package org.flora.expression.literals;
+
+import org.flora.FloraException;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
- * 模块代码为'EL'
- * 
  * @author 7cat
  * @since 1.0
  */
-public final class ErrorCodes {
+public class StringExpressionTest {
 
-	/** 表达式语法错误. */
-	public static final String EXPRESSION_SYNTAX_ERROR = "EREL0101";
-	
-	/** 表达式存在歧义. */
-	public static final String EXPRESSION_AMBIGUITY_ERROR = "EREL0102";
+	@Test
+	public void test() {
+		ExpressionUtils.parse("'str1'");
+		ExpressionUtils.parse("'str1'+'str2'");
+		ExpressionUtils.parse("'str1'+LOWER('ABCD')");
+		ExpressionUtils.parse("'str1'+LOWER([TABLE.FIELD1])");
+		try {
+			ExpressionUtils.parse("'str1'+LOWER([TABLE.FIELD1])+");
+			Assert.fail("'str1'+LOWER([TABLE.FIELD1])+");
+		}
+		catch (FloraException e) {
+		}
+		ExpressionUtils.parse("[TABLE1.FIELD2]+'abcde'");
+	}
 }

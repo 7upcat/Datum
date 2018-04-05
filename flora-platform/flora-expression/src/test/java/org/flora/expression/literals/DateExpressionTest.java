@@ -21,19 +21,20 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.flora.expression;
+package org.flora.expression.literals;
+
+import org.junit.Test;
 
 /**
- * 模块代码为'EL'
- * 
  * @author 7cat
  * @since 1.0
  */
-public final class ErrorCodes {
+public class DateExpressionTest {
 
-	/** 表达式语法错误. */
-	public static final String EXPRESSION_SYNTAX_ERROR = "EREL0101";
-	
-	/** 表达式存在歧义. */
-	public static final String EXPRESSION_AMBIGUITY_ERROR = "EREL0102";
+	@Test
+	public void testValidExpression() {
+		ExpressionUtils.parse("#2018-01-01#-20");
+		ExpressionUtils.parse("#2018-01-01#");
+		ExpressionUtils.parse("[ABCD.BCDF]-22");
+	}
 }

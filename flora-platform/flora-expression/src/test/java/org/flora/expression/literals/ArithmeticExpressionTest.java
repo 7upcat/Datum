@@ -21,19 +21,42 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.flora.expression;
+package org.flora.expression.literals;
+
+import org.flora.FloraException;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
- * 模块代码为'EL'
- * 
  * @author 7cat
  * @since 1.0
  */
-public final class ErrorCodes {
+public class ArithmeticExpressionTest {
 
-	/** 表达式语法错误. */
-	public static final String EXPRESSION_SYNTAX_ERROR = "EREL0101";
-	
-	/** 表达式存在歧义. */
-	public static final String EXPRESSION_AMBIGUITY_ERROR = "EREL0102";
+	@Test
+	public void testValidExpression() {
+		ExpressionUtils.parse("-2");
+		ExpressionUtils.parse("2+5");
+		ExpressionUtils.parse("-(2+5)");
+		try {
+			ExpressionUtils.parse("2+");
+			Assert.fail("2+");
+		}
+		catch (FloraException e) {
+		}
+		ExpressionUtils.parse("ABS(55)");
+		ExpressionUtils.parse("ABS(-55)");
+		ExpressionUtils.parse("ABS(-55)-20");
+		ExpressionUtils.parse("-ABS(-55)-20");
+		try {
+			ExpressionUtils.parse("-ABS(-55)+");
+			Assert.fail("-ABS(-55)+");
+		}
+		catch (FloraException e) {
+		}
+
+		ExpressionUtils.parse("-ABS([TABLE.FIELD])-[TABLE.FIELD2]");
+		
+		ExpressionUtils.parse("[TABLE1.FIELD2]+1234");
+	}
 }

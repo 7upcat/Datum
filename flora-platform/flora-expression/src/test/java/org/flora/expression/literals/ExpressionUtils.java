@@ -25,7 +25,7 @@ package org.flora.expression.literals;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.flora.expression.ErrorListener;
+import org.flora.expression.FloraExpressionErrorListener;
 import org.flora.expression.antlr.FloraExpressionLexer;
 import org.flora.expression.antlr.FloraExpressionParser;
 
@@ -36,13 +36,15 @@ import org.flora.expression.antlr.FloraExpressionParser;
 public final class ExpressionUtils {
 
 	public static ParseTree parse(String expression) {
-		ErrorListener listener = new ErrorListener();
+		FloraExpressionErrorListener listener = new FloraExpressionErrorListener();
 		FloraExpressionLexer lexer = new FloraExpressionLexer(CharStreams.fromString(expression));
 		lexer.removeErrorListeners();
+//		lexer.addErrorListener(new DiagnosticErrorListener(true));
 		lexer.addErrorListener(listener);
 		CommonTokenStream tokens = new CommonTokenStream(lexer);
 		FloraExpressionParser parser = new FloraExpressionParser(tokens);
 		parser.removeErrorListeners();
+//		parser.addErrorListener(new DiagnosticErrorListener(true));
 		parser.addErrorListener(listener);
 		return parser.grammars();
 	}
