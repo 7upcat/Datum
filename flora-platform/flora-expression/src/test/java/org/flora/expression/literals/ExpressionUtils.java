@@ -46,6 +46,6 @@ public final class ExpressionUtils {
 		parser.removeErrorListeners();
 //		parser.addErrorListener(new DiagnosticErrorListener(true));
 		parser.addErrorListener(listener);
-		return parser.grammars();
+		return parser.calculations();
 	}
 }

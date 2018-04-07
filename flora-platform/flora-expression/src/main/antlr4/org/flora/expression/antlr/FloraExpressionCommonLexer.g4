@@ -98,6 +98,42 @@ DATE
 	) '#'
 ;
 
+COMPARISON_OPERATOR
+:
+	'=='
+	| '>'
+	| '<'
+	| '>='
+	| '<='
+	| '!='
+;
+
+LOGICAL_OPERATOR
+:
+	'AND'
+	| 'OR'
+;
+
+TRUE
+:
+	'TRUE'
+;
+
+FALSE
+:
+	'FALSE'
+;
+
+COMMENT
+:
+	'/*' .*? '*/' -> channel ( HIDDEN )
+;
+
+LINE_COMMENT
+:
+	'//' ~[\r\n]* -> channel ( HIDDEN )
+;
+
 WS
 :
 	[ \t\r\n] -> skip

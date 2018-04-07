@@ -35,28 +35,33 @@ public class ArithmeticExpressionTest {
 
 	@Test
 	public void testValidExpression() {
-		ExpressionUtils.parse("-2");
-		ExpressionUtils.parse("2+5");
-		ExpressionUtils.parse("-(2+5)");
+		ExpressionUtils.parse("2;");
+		ExpressionUtils.parse("-2;");
+		ExpressionUtils.parse("2+5;");
+		ExpressionUtils.parse("2+5+3;");
+		ExpressionUtils.parse("2+(5+3);");
+		ExpressionUtils.parse("-(2+5);");
 		try {
-			ExpressionUtils.parse("2+");
-			Assert.fail("2+");
+			ExpressionUtils.parse("2+;");
+			Assert.fail("2+;");
 		}
 		catch (FloraException e) {
 		}
-		ExpressionUtils.parse("ABS(55)");
-		ExpressionUtils.parse("ABS(-55)");
-		ExpressionUtils.parse("ABS(-55)-20");
-		ExpressionUtils.parse("-ABS(-55)-20");
+		ExpressionUtils.parse("ABS(55);");
+		ExpressionUtils.parse("ABS(-55);");
+		ExpressionUtils.parse("ABS(-55)-20;");
+		ExpressionUtils.parse("-ABS(-55)-20;");
+		ExpressionUtils.parse("22-ABS(-55);");
+		ExpressionUtils.parse("22-(ABS(-55-20)+25);");
 		try {
-			ExpressionUtils.parse("-ABS(-55)+");
-			Assert.fail("-ABS(-55)+");
+			ExpressionUtils.parse("-ABS(-55)+;");
+			Assert.fail("-ABS(-55)+;");
 		}
 		catch (FloraException e) {
 		}
 
-		ExpressionUtils.parse("-ABS([TABLE.FIELD])-[TABLE.FIELD2]");
-		
-		ExpressionUtils.parse("[TABLE1.FIELD2]+1234");
+		ExpressionUtils.parse("-ABS([TABLE.FIELD])-[TABLE.FIELD2];");
+
+		ExpressionUtils.parse("[TABLE1.FIELD2]+1234;");
 	}
 }

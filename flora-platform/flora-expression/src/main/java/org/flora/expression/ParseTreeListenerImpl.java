@@ -21,35 +21,36 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.flora.expression.literals;
+package org.flora.expression;
 
-import org.junit.Test;
+import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.tree.ErrorNode;
+import org.antlr.v4.runtime.tree.ParseTreeListener;
+import org.antlr.v4.runtime.tree.TerminalNode;
 
 /**
  * 
  * @author 7cat
  * @since 1.0
  */
-public class OperatorTest {
+public class ParseTreeListenerImpl implements ParseTreeListener{
 
-	@Test
-	public void numberic() {
-		System.out.println(ExpressionUtils.parse("25*25"));
-		ExpressionUtils.parse("55+ 55");
-//		ExpressionUtils.parse("  ABS(  55  ) - 25");
-//		ExpressionUtils.parse("  ABS(  55  ) * 25");
-//		ExpressionUtils.parse("  ABS(  55  ) / 25");
-//		ExpressionUtils.parse("  ABS(  55  ) % 25");
-//		ExpressionUtils.parse("  55 + 25");
-//		ExpressionUtils.parse("  55 - 25");
-//		ExpressionUtils.parse("  55 * 25");
-//		ExpressionUtils.parse("  55 / 25");
-//		ExpressionUtils.parse("  55 % 25");
+	@Override
+	public void visitTerminal(TerminalNode node) {
+		
+	}
+	
+
+	@Override
+	public void visitErrorNode(ErrorNode node) {
 	}
 
-	@Test
-	public void string() {
-//		ExpressionUtils.parse("'abcd sjbdkfa 123io1'");
-//		ExpressionUtils.parse("'str1'+ 'str2' + ");
+	@Override
+	public void enterEveryRule(ParserRuleContext ctx) {
 	}
+
+	@Override
+	public void exitEveryRule(ParserRuleContext ctx) {
+	}
+
 }

@@ -1,18 +1,17 @@
 grammar FloraExpression;
 
 import FloraExpressionCommonLexer;
-// 语法包含  函数、数据域引用、参数、字面量、操作符、注释
 
-grammars
+calculations
 :
-	expression
-;
+	arithmetic_expression ';' // 计算求值表达式 
 
-expression
-:
-	arithmetic_expression
-	| string_expression
-	| date_expression
+	| string_expression ';' // 字符求值表达式
+
+	| date_expression ';' // 日期求值表达式
+
+	| comparison_expression ';' // 比较(布尔)求值表达式
+
 ;
 
 arithmetic_expression
@@ -57,10 +56,7 @@ number_functions
 
 abs
 :
-	'ABS' '('
-	(
-		arithmetic_expression
-	) ')'
+	'ABS' '(' arithmetic_expression ')'
 ;
 
 div
@@ -80,15 +76,9 @@ string_expression
 		'+'
 	) string_expression
 	| string_literal
-	| field
 	| string_functions
-	| '('+ string_expression+ ')'
-;
-
-string_literal
-:
-	STRING
-;
+	| field
+	|'(' string_expression ')' ;
 
 //所有返回值为String的函数列表(注意并非和 StringFunctions 完全一致)
 
@@ -102,8 +92,15 @@ lower
 	'LOWER' '(' string_expression ')'
 ;
 
+string_literal
+:
+	STRING
+;
+
 date_expression
 :
+
+// TODO 如果改成 arithmetic_expression 则无法检测出 '2+' 这类的表达式,暂时使用 numeric_literal 不支持嵌套. 
 	date_expression
 	(
 		'+'
@@ -114,13 +111,62 @@ date_expression
 		'+'
 		| '-'
 	) field
-	| field
 	| date_literal
+	| field
+	| '(' date_expression ')'
 ;
 
 date_literal
 :
 	DATE
+;
+
+comparison_expression
+:
+	arithmetic_expression
+	(
+		COMPARISON_OPERATOR
+	)
+	(
+		arithmetic_expression
+		| field
+	)
+	| string_expression
+	(
+		COMPARISON_OPERATOR
+	)
+	(
+		string_expression
+		| field
+	)
+	| date_expression
+	(
+		COMPARISON_OPERATOR
+	)
+	(
+		date_expression
+		| field
+	)
+	| field
+	(
+		COMPARISON_OPERATOR
+	)
+	(
+		arithmetic_expression
+		| string_expression
+		| date_expression
+	)
+	| comparison_expression
+	(
+		LOGICAL_OPERATOR
+	) comparison_expression
+	| '(' comparison_expression ')'
+;
+
+comment
+:
+	COMMENT
+	| LINE_COMMENT
 ;
 
 field

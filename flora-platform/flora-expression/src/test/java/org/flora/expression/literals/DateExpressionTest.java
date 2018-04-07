@@ -23,6 +23,8 @@
 
 package org.flora.expression.literals;
 
+import org.flora.FloraException;
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -32,9 +34,22 @@ import org.junit.Test;
 public class DateExpressionTest {
 
 	@Test
-	public void testValidExpression() {
-		ExpressionUtils.parse("#2018-01-01#-20");
-		ExpressionUtils.parse("#2018-01-01#");
-		ExpressionUtils.parse("[ABCD.BCDF]-22");
+	public void testExpression() {
+		ExpressionUtils.parse("#2018-03-31#;");
+		ExpressionUtils.parse("#2018-03-31#+1;");
+		ExpressionUtils.parse("(#2018-03-31#+1)+2;");
+		try {
+			ExpressionUtils.parse("#2018-03-32#;");
+			Assert.fail("#2018-03-32# is illegal");
+		}
+		catch (FloraException e) {
+		}
+		ExpressionUtils.parse("/*  test comment */\n     #2018-03-31#;");
+		try {
+			ExpressionUtils.parse("#2018/03/31#;");
+			Assert.fail("#2018/03/31# is illegal");
+		}
+		catch (FloraException e) {
+		}
 	}
 }

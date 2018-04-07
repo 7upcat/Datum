@@ -35,16 +35,23 @@ public class StringExpressionTest {
 
 	@Test
 	public void test() {
-		ExpressionUtils.parse("'str1'");
-		ExpressionUtils.parse("'str1'+'str2'");
-		ExpressionUtils.parse("'str1'+LOWER('ABCD')");
-		ExpressionUtils.parse("'str1'+LOWER([TABLE.FIELD1])");
+		ExpressionUtils.parse("'str1';");
+		ExpressionUtils.parse("('str1');");
+		ExpressionUtils.parse("'str1' + 'str2';");
+		ExpressionUtils.parse("('str1' + 'str2');");
+		ExpressionUtils.parse("'str1' + ('str2');");
+		ExpressionUtils.parse("'str1' + 'str2'+'str3';");
+		ExpressionUtils.parse("LOWER('ABCD');");
+//		ExpressionUtils.parse("LOWER('ABCD')+'abcd';");
+		ExpressionUtils.parse("'str1' + LOWER('ABCD');");
+		ExpressionUtils.parse("'str1'+LOWER([TABLE.FIELD1]);");
 		try {
-			ExpressionUtils.parse("'str1'+LOWER([TABLE.FIELD1])+");
-			Assert.fail("'str1'+LOWER([TABLE.FIELD1])+");
+			ExpressionUtils.parse("'str1'+LOWER([TABLE.FIELD1])+;");
+			Assert.fail("'str1'+LOWER([TABLE.FIELD1])+;");
 		}
 		catch (FloraException e) {
 		}
-		ExpressionUtils.parse("[TABLE1.FIELD2]+'abcde'");
+		ExpressionUtils.parse("[TABLE1.FIELD2]+'abcde';");
 	}
 }
+

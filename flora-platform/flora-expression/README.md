@@ -5,9 +5,9 @@
 * **Easy Yet Powerful**: 非技术人员也很容易学习使用.
 * **Lean Once Use Anywhere**: 各类数据源(SQL、NOSQL、BigData、Excel等等) 都具有一致的求值运算语法.
 
-##文档
+## 场景
 
-### 语法
+## 语法
 
 ### 字面量（Literal）
 
@@ -23,6 +23,14 @@
 
 #### 参数
 
+### 注释
+
+```
+// 单行注释
+
+/* 多行注释 */
+```
+
 ### 函数
 
 #### 数学函数（Mathematical Functions）
@@ -33,5 +41,3 @@
 
 #### 聚合函数（Aggregate Functions）
  
-
-### 注释

@@ -23,6 +23,7 @@
 
 package org.flora.expression.literals;
 
+import org.flora.FloraException;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -30,23 +31,21 @@ import org.junit.Test;
  * @author 7cat
  * @since 1.0
  */
-public class DateLiteralTest {
+public class CommentExpressionTest {
 
 	@Test
-	public void testDateLiteral() {
-		ExpressionUtils.parse("#2018-03-31#+");
+	public void testExpression() {
 		try {
-			ExpressionUtils.parse("#2018-03-32#");
-			Assert.fail("#2018-03-32# is illegal");
+			ExpressionUtils.parse("/*  test comment */\n");
+			Assert.fail("/*  test comment */\\n");
 		}
-		catch (Exception e) {
+		catch (FloraException e) {
 		}
-		ExpressionUtils.parse("/*  test comment */\n     #2018-03-31#");
-		try {
-			ExpressionUtils.parse("#2018/03/31#");
-			Assert.fail("#2018/03/31# is illegal");
-		}
-		catch (Exception e) {
-		}
+
+		ExpressionUtils.parse("/*  test comment */\n \n #2018-02-01#;");
+
+		ExpressionUtils.parse("#2018-02-01#; // line comment");
+
+		ExpressionUtils.parse("// line comment #2018-02-01#\n 25+22;");
 	}
 }
