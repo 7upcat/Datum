@@ -20,12 +20,15 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package org.flora.expression.literals;
+package org.flora.expression;
 
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.misc.TestRig;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.flora.expression.FloraExpressionErrorListener;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import org.flora.expression.antlr.DemoLexer;
+import org.flora.expression.antlr.DemoParser;
 import org.flora.expression.antlr.FloraExpressionLexer;
 import org.flora.expression.antlr.FloraExpressionParser;
 
@@ -35,8 +38,8 @@ import org.flora.expression.antlr.FloraExpressionParser;
  */
 public final class ExpressionUtils {
 
-	public static ParseTree parse(String expression) {
-		FloraExpressionErrorListener listener = new FloraExpressionErrorListener();
+	public static void parse(String expression) {
+		ErrorListener listener = new ErrorListener();
 		FloraExpressionLexer lexer = new FloraExpressionLexer(CharStreams.fromString(expression));
 		lexer.removeErrorListeners();
 //		lexer.addErrorListener(new DiagnosticErrorListener(true));
@@ -46,6 +49,23 @@ public final class ExpressionUtils {
 		parser.removeErrorListeners();
 //		parser.addErrorListener(new DiagnosticErrorListener(true));
 		parser.addErrorListener(listener);
-		return parser.calculations();
+		ParseTreeWalker walker = new ParseTreeWalker();
+		walker.walk(new FloraExpressioListener(), parser.calculations());
+	}
+	
+	public static ParseTree parseDemo(String expression) {
+		ErrorListener listener = new ErrorListener();
+		DemoLexer lexer = new DemoLexer(CharStreams.fromString(expression));
+		lexer.removeErrorListeners();
+		lexer.addErrorListener(listener);
+		CommonTokenStream tokens = new CommonTokenStream(lexer);
+		DemoParser parser = new DemoParser(tokens);
+		parser.removeErrorListeners();
+		parser.addErrorListener(listener);
+		return parser.expressions();
+	}
+	
+	public static void main(String[] args) {
+		parse("-2+22;");
 	}
 }

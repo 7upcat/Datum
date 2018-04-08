@@ -2,174 +2,68 @@ grammar FloraExpression;
 
 import FloraExpressionCommonLexer;
 
-calculations
-:
-	arithmetic_expression ';' // 计算求值表达式 
-
-	| string_expression ';' // 字符求值表达式
-
-	| date_expression ';' // 日期求值表达式
-
-	| comparison_expression ';' // 比较(布尔)求值表达式
-
+calculations : 
+    (arithmetic_expression|string_expression|date_expression|bool_expression) ';'
+    |comment_expression
 ;
 
-arithmetic_expression
-:
-	arithmetic_expression
-	(
-		'*'
-		| '/'
-		| '%'
-	) arithmetic_expression
-	| arithmetic_expression
-	(
-		'+'
-		| '-'
-	) arithmetic_expression
-	|
-	(
-		'-'
-	)? numeric_literal
-	|
-	(
-		'-'
-	)? field
-	|
-	(
-		'-'
-	)? number_functions
-	|
-	(
-		'-'
-	)? '(' arithmetic_expression ')'
+arithmetic_expression : 
+    <assoc=right> arithmetic_expression '^' arithmetic_expression
+    |arithmetic_expression ('*'|'/'|'%') arithmetic_expression
+    | arithmetic_expression ('+'|'-') arithmetic_expression
+    | ('-')? (numeric_literal|field|functions_returning_numerics|'(' arithmetic_expression ')')
 ;
 
-//所有返回值为数字的函数列表(注意并非和 NumberFunctions 完全一致)
-
-number_functions
-:
-	abs
-	| div
-;
-//---------------------------------------------NumberFunctions
-
-abs
-:
-	'ABS' '(' arithmetic_expression ')'
+functions_returning_numerics :
+    abs|div
 ;
 
-div
-:
-	'DIV' '(' arithmetic_expression ',' arithmetic_expression ')'
+abs :
+    'ABS' '(' arithmetic_expression ')'
 ;
 
-numeric_literal
-:
-	NUMBER
+div :
+    'DIV' '(' arithmetic_expression ',' arithmetic_expression ')'
 ;
 
-string_expression
-:
-	string_expression
-	(
-		'+'
-	) string_expression
-	| string_literal
-	| string_functions
-	| field
-	|'(' string_expression ')' ;
+numeric_literal : NUMBER;
 
-//所有返回值为String的函数列表(注意并非和 StringFunctions 完全一致)
-
-string_functions
-:
-	lower
+string_expression :
+    string_expression ('+') string_expression
+    | string_literal
+    | functions_returning_strings
+    | field
+    | '(' string_expression ')'
 ;
 
-lower
-:
-	'LOWER' '(' string_expression ')'
+functions_returning_strings :
+    lower
 ;
 
-string_literal
-:
-	STRING
+lower : 'LOWER' '(' string_expression ')';
+
+string_literal : STRING;
+
+date_expression :
+    date_expression ( '+'|'-' ) arithmetic_expression
+    | date_expression ( '+'|'-' ) field
+    | date_literal
+    | field
+    | '(' date_expression ')'
 ;
 
-date_expression
-:
+date_literal : DATE;
 
-// TODO 如果改成 arithmetic_expression 则无法检测出 '2+' 这类的表达式,暂时使用 numeric_literal 不支持嵌套. 
-	date_expression
-	(
-		'+'
-		| '-'
-	) arithmetic_expression
-	| date_expression
-	(
-		'+'
-		| '-'
-	) field
-	| date_literal
-	| field
-	| '(' date_expression ')'
+bool_expression :
+    arithmetic_expression ( COMPARISON_OPERATOR ) ( arithmetic_expression|field )
+    | string_expression ( COMPARISON_OPERATOR ) ( string_expression|field )
+    | date_expression ( COMPARISON_OPERATOR ) ( date_expression|field )
+    | field ( COMPARISON_OPERATOR ) ( arithmetic_expression|string_expression|date_expression )
+    | bool_expression ( 'AND'|'OR' ) bool_expression
+    | '(' bool_expression ')'
 ;
 
-date_literal
-:
-	DATE
-;
 
-comparison_expression
-:
-	arithmetic_expression
-	(
-		COMPARISON_OPERATOR
-	)
-	(
-		arithmetic_expression
-		| field
-	)
-	| string_expression
-	(
-		COMPARISON_OPERATOR
-	)
-	(
-		string_expression
-		| field
-	)
-	| date_expression
-	(
-		COMPARISON_OPERATOR
-	)
-	(
-		date_expression
-		| field
-	)
-	| field
-	(
-		COMPARISON_OPERATOR
-	)
-	(
-		arithmetic_expression
-		| string_expression
-		| date_expression
-	)
-	| comparison_expression
-	(
-		LOGICAL_OPERATOR
-	) comparison_expression
-	| '(' comparison_expression ')'
-;
+comment_expression : COMMENT | LINE_COMMENT;
 
-comment
-:
-	COMMENT
-	| LINE_COMMENT
-;
-
-field
-:
-	'[' FIELD ']'
-;
+field : '[' FIELD ']';

@@ -39,7 +39,7 @@ import org.flora.FloraException;
  * @author 7cat
  * @since 1.0
  */
-public class FloraExpressionErrorListener extends BaseErrorListener {
+public class ErrorListener extends BaseErrorListener {
 
 	@Override
 	public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine,

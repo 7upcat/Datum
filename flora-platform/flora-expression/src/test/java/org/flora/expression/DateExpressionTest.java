@@ -21,7 +21,7 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.flora.expression.literals;
+package org.flora.expression;
 
 import org.flora.FloraException;
 import org.junit.Assert;
@@ -31,21 +31,25 @@ import org.junit.Test;
  * @author 7cat
  * @since 1.0
  */
-public class CommentExpressionTest {
+public class DateExpressionTest {
 
 	@Test
 	public void testExpression() {
+		ExpressionUtils.parse("#2018-03-31#;");
+		ExpressionUtils.parse("#2018-03-31#+1;");
+		ExpressionUtils.parse("(#2018-03-31#+1)+2;");
 		try {
-			ExpressionUtils.parse("/*  test comment */\n");
-			Assert.fail("/*  test comment */\\n");
+			ExpressionUtils.parse("#2018-03-32#;");
+			Assert.fail("#2018-03-32# is illegal");
 		}
 		catch (FloraException e) {
 		}
-
-		ExpressionUtils.parse("/*  test comment */\n \n #2018-02-01#;");
-
-		ExpressionUtils.parse("#2018-02-01#; // line comment");
-
-		ExpressionUtils.parse("// line comment #2018-02-01#\n 25+22;");
+		ExpressionUtils.parse("/*  test comment */\n     #2018-03-31#;");
+		try {
+			ExpressionUtils.parse("#2018/03/31#;");
+			Assert.fail("#2018/03/31# is illegal");
+		}
+		catch (FloraException e) {
+		}
 	}
 }

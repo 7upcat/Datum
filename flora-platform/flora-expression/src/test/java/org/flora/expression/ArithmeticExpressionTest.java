@@ -23,34 +23,47 @@
 
 package org.flora.expression;
 
-import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.tree.ErrorNode;
-import org.antlr.v4.runtime.tree.ParseTreeListener;
-import org.antlr.v4.runtime.tree.TerminalNode;
+import org.flora.FloraException;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
- * 
  * @author 7cat
  * @since 1.0
  */
-public class ParseTreeListenerImpl implements ParseTreeListener{
+public class ArithmeticExpressionTest {
 
-	@Override
-	public void visitTerminal(TerminalNode node) {
-		
+	@Test
+	public void testValidExpression() {
+		ExpressionUtils.parse("2;");
+		ExpressionUtils.parse("-2;");
+		ExpressionUtils.parse("2+5;");
+		ExpressionUtils.parse("2^5;");
+		ExpressionUtils.parse("2+(5);");
+		ExpressionUtils.parse("2+5+3;");
+		ExpressionUtils.parse("2+(5+3);");
+		ExpressionUtils.parse("-(2+5);");
+		try {
+			ExpressionUtils.parse("2+;");
+			Assert.fail("2+;");
+		}
+		catch (FloraException e) {
+		}
+		ExpressionUtils.parse("ABS(55);");
+		ExpressionUtils.parse("ABS(-55);");
+		ExpressionUtils.parse("ABS(-55)-20;");
+		ExpressionUtils.parse("-ABS(-55)-20;");
+		ExpressionUtils.parse("22-ABS(-55);");
+		ExpressionUtils.parse("22-(ABS(-55-20)+25);");
+		try {
+			ExpressionUtils.parse("-ABS(-55)+;");
+			Assert.fail("-ABS(-55)+;");
+		}
+		catch (FloraException e) {
+		}
+
+		ExpressionUtils.parse("-ABS([TABLE.FIELD])-[TABLE.FIELD2];");
+
+		ExpressionUtils.parse("[TABLE1.FIELD2]+1234;");
 	}
-	
-
-	@Override
-	public void visitErrorNode(ErrorNode node) {
-	}
-
-	@Override
-	public void enterEveryRule(ParserRuleContext ctx) {
-	}
-
-	@Override
-	public void exitEveryRule(ParserRuleContext ctx) {
-	}
-
 }

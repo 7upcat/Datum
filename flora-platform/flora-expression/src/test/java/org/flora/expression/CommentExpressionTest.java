@@ -21,7 +21,7 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.flora.expression.literals;
+package org.flora.expression;
 
 import org.flora.FloraException;
 import org.junit.Assert;
@@ -31,27 +31,21 @@ import org.junit.Test;
  * @author 7cat
  * @since 1.0
  */
-public class StringExpressionTest {
+public class CommentExpressionTest {
 
 	@Test
-	public void test() {
-		ExpressionUtils.parse("'str1';");
-		ExpressionUtils.parse("('str1');");
-		ExpressionUtils.parse("'str1' + 'str2';");
-		ExpressionUtils.parse("('str1' + 'str2');");
-		ExpressionUtils.parse("'str1' + ('str2');");
-		ExpressionUtils.parse("'str1' + 'str2'+'str3';");
-		ExpressionUtils.parse("LOWER('ABCD');");
-//		ExpressionUtils.parse("LOWER('ABCD')+'abcd';");
-		ExpressionUtils.parse("'str1' + LOWER('ABCD');");
-		ExpressionUtils.parse("'str1'+LOWER([TABLE.FIELD1]);");
+	public void testExpression() {
 		try {
-			ExpressionUtils.parse("'str1'+LOWER([TABLE.FIELD1])+;");
-			Assert.fail("'str1'+LOWER([TABLE.FIELD1])+;");
+			ExpressionUtils.parse("/*  test comment */\n");
+			Assert.fail("/*  test comment */\\n");
 		}
 		catch (FloraException e) {
 		}
-		ExpressionUtils.parse("[TABLE1.FIELD2]+'abcde';");
+
+		ExpressionUtils.parse("/*  test comment */\n \n #2018-02-01#;");
+
+		ExpressionUtils.parse("#2018-02-01#; // line comment");
+
+		ExpressionUtils.parse("// line comment #2018-02-01#\n 25+22;");
 	}
 }
-

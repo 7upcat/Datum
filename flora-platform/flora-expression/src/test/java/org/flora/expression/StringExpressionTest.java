@@ -21,7 +21,7 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.flora.expression.literals;
+package org.flora.expression;
 
 import org.flora.FloraException;
 import org.junit.Assert;
@@ -31,37 +31,24 @@ import org.junit.Test;
  * @author 7cat
  * @since 1.0
  */
-public class ArithmeticExpressionTest {
+public class StringExpressionTest {
 
 	@Test
-	public void testValidExpression() {
-		ExpressionUtils.parse("2;");
-		ExpressionUtils.parse("-2;");
-		ExpressionUtils.parse("2+5;");
-		ExpressionUtils.parse("2+5+3;");
-		ExpressionUtils.parse("2+(5+3);");
-		ExpressionUtils.parse("-(2+5);");
+	public void test() {
+		ExpressionUtils.parse("'str1';");
+		ExpressionUtils.parse("'str1' + 'str2';");
+		ExpressionUtils.parse("'str1' + 'str2'+'str3';");
+		ExpressionUtils.parse("LOWER('ABCD');");
+		ExpressionUtils.parse("LOWER('ABCD') + 'abcd';");
+		ExpressionUtils.parse("'str1' + LOWER('ABCD');");
+		ExpressionUtils.parse("'str1'+LOWER([TABLE.FIELD1]);");
 		try {
-			ExpressionUtils.parse("2+;");
-			Assert.fail("2+;");
+			ExpressionUtils.parse("'str1'+LOWER([TABLE.FIELD1])+;");
+			Assert.fail("'str1'+LOWER([TABLE.FIELD1])+;");
 		}
 		catch (FloraException e) {
 		}
-		ExpressionUtils.parse("ABS(55);");
-		ExpressionUtils.parse("ABS(-55);");
-		ExpressionUtils.parse("ABS(-55)-20;");
-		ExpressionUtils.parse("-ABS(-55)-20;");
-		ExpressionUtils.parse("22-ABS(-55);");
-		ExpressionUtils.parse("22-(ABS(-55-20)+25);");
-		try {
-			ExpressionUtils.parse("-ABS(-55)+;");
-			Assert.fail("-ABS(-55)+;");
-		}
-		catch (FloraException e) {
-		}
-
-		ExpressionUtils.parse("-ABS([TABLE.FIELD])-[TABLE.FIELD2];");
-
-		ExpressionUtils.parse("[TABLE1.FIELD2]+1234;");
+		ExpressionUtils.parse("[TABLE1.FIELD2]+'abcde';");
 	}
 }
+

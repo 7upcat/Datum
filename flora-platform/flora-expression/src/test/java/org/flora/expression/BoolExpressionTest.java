@@ -21,7 +21,7 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.flora.expression.literals;
+package org.flora.expression;
 
 import org.junit.Test;
 
@@ -29,15 +29,8 @@ import org.junit.Test;
  * @author 7cat
  * @since 1.0
  */
-public class ComparisonExpressionTest {
+public class BoolExpressionTest {
 
-//	  arithmetic_expression (COMPARISON_OPERATOR) (arithmetic_expression|field)
-//	  | string_expression (COMPARISON_OPERATOR) (string_expression|field)
-//	  | date_expression (COMPARISON_OPERATOR) (date_expression|field)
-//	  | field (COMPARISON_OPERATOR) ( arithmetic_expression|string_expression|date_expression)
-//	  | comparison_expression (LOGICAL_OPERATOR) comparison_expression
-//	  | '(' comparison_expression ')'
-	
 	@Test
 	public void testExpression() {
 		// arithmetic
@@ -56,12 +49,17 @@ public class ComparisonExpressionTest {
 		// string
 		ExpressionUtils.parse("'abcd'>'abc';");
 		ExpressionUtils.parse("'abcd'>='abc';");
-		ExpressionUtils.parse("'abcd'AND 15<5;");
+		ExpressionUtils.parse("'abcd'>='abc' AND 15<5;");
 		ExpressionUtils.parse("'abcd'>='22' OR '55'<'22';");
-//		ExpressionUtils.parse("('abcd'>='22') OR '55'<'22';");
-		ExpressionUtils.parse("('abcd'>='22') OR ('55'<'22');");
-		
-//		ExpressionUtils.parse("('abcd'>='22') AND '55'<'22';");
-		
+		ExpressionUtils.parse("('abcd'>='22') OR '55'<='22';");
+		ExpressionUtils.parse("('abcd'>='22' AND 123>456) OR ('55'<'22');");
+
+		// field
+		ExpressionUtils.parse("[TABLE.FIELD]> 'abc';");
+		ExpressionUtils.parse("[TABLE.FIELD]<= (22+23-55/ABS(33));");
+		ExpressionUtils.parse("[TABLE.FIELD]<= #2018-02-02#;");
+		ExpressionUtils.parse("[TABLE.FIELD] <= #2018-02-02# AND [TABLE.FIELD2] >= 'abcd';");
+		ExpressionUtils.parse("([TABLE.FIELD] <= #2018-02-02# AND [TABLE.FIELD2] >= 'abcd');");
+		ExpressionUtils.parse("([TABLE.FIELD] <= #2018-02-02# AND [TABLE.FIELD2] >= 'abcd') OR 4>5;");
 	}
 }
