@@ -77,6 +77,7 @@ public final class ExpressionUtils {
 
 	public static void main(String[] args) {
 		// showGui("-2+(3)+(ABS((33+5)*6)-5);");
-		showGui("(2+5*3>=22.6 AND 123>[TABLE.FIELD]) OR ('55' <= '22' AND LOWER('25'+'32')> '55') AND 'str1'!='str2' AND 'str3'=='str4';");
+		showGui("(2+5*3>=22.6 AND 123>[TABLE.FIELD]) OR ('55' <= '22' AND LOWER('25'+'32')> '55') AND 'str1'!='str2' AND 'str3'=='str4' AND NATIVE('CONCAT','STR1','STR2')>'32';");
+//		showGui("NATIVE('CONCAT','str1',23.22,#2018-02-02#);");
 	}
 }
