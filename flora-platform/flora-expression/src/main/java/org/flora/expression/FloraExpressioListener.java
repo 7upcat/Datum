@@ -25,14 +25,13 @@ package org.flora.expression;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
-import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.flora.expression.antlr.FloraExpressionBaseListener;
 import org.flora.expression.antlr.FloraExpressionParser;
 
 /**
- * 数据库类型数据源的 {@link ParseTreeListener}实现.
+ * 数据库类型数据源的 {@link ParseTreeListener} 实现.
  * 
  * @author 7cat
  * @since 1.0
@@ -50,16 +49,6 @@ public class FloraExpressioListener extends FloraExpressionBaseListener {
 
 	@Override
 	public void enterArithmetic_expression(FloraExpressionParser.Arithmetic_expressionContext ctx) {
-		StringBuilder sb = new StringBuilder();
-		
-		for(int i=0;i<ctx.getChildCount();i++) {
-			ParseTree tree = ctx.getChild(i);
-			if(tree instanceof TerminalNode) {
-				sb.append(tree.getText());
-			} else {
-				
-			}
-		}
 	}
 
 	@Override
@@ -92,7 +81,6 @@ public class FloraExpressioListener extends FloraExpressionBaseListener {
 
 	@Override
 	public void enterNumeric_literal(FloraExpressionParser.Numeric_literalContext ctx) {
-		System.out.println(ctx);
 	}
 
 	@Override
@@ -117,6 +105,9 @@ public class FloraExpressioListener extends FloraExpressionBaseListener {
 
 	@Override
 	public void enterLower(FloraExpressionParser.LowerContext ctx) {
+		for(int i=0;i<ctx.getChildCount();i++) {
+//			System.out.println("===="+ctx.getChild(i));
+		}
 	}
 
 	@Override
@@ -125,6 +116,7 @@ public class FloraExpressioListener extends FloraExpressionBaseListener {
 
 	@Override
 	public void enterString_literal(FloraExpressionParser.String_literalContext ctx) {
+		
 	}
 
 	@Override
@@ -173,6 +165,7 @@ public class FloraExpressioListener extends FloraExpressionBaseListener {
 
 	@Override
 	public void enterEveryRule(ParserRuleContext ctx) {
+//		System.out.println(ctx.getText());
 	}
 
 	@Override
@@ -181,6 +174,7 @@ public class FloraExpressioListener extends FloraExpressionBaseListener {
 
 	@Override
 	public void visitTerminal(TerminalNode node) {
+		System.out.print(" "+node);
 	}
 
 	@Override

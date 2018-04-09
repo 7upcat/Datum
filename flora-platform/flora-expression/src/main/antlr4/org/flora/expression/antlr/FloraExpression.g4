@@ -2,6 +2,7 @@ grammar FloraExpression;
 
 import FloraExpressionCommonLexer;
 
+
 calculations : 
     (arithmetic_expression|string_expression|date_expression|bool_expression) ';'
     |comment_expression
@@ -62,6 +63,8 @@ bool_expression :
     | bool_expression ( 'AND'|'OR' ) bool_expression
     | '(' bool_expression ')'
 ;
+
+//native_expression: 'NATIVE' '(' string_literal (','(arithmetic_expression|string_expression|date_expression))* ')';
 
 
 comment_expression : COMMENT | LINE_COMMENT;

@@ -1,6 +1,7 @@
 lexer grammar FloraExpressionCommonLexer;
 
-NUMBER : [0-9]+ ;
+
+NUMBER : [0-9]+('.'[0-9]+)?;
 
 FIELD :
     ( 'a' .. 'z' | 'A' .. 'Z' | '_' )

@@ -20,15 +20,13 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+
 package org.flora.expression;
 
+import org.antlr.v4.gui.Trees;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.misc.TestRig;
-import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
-import org.flora.expression.antlr.DemoLexer;
-import org.flora.expression.antlr.DemoParser;
 import org.flora.expression.antlr.FloraExpressionLexer;
 import org.flora.expression.antlr.FloraExpressionParser;
 
@@ -38,34 +36,47 @@ import org.flora.expression.antlr.FloraExpressionParser;
  */
 public final class ExpressionUtils {
 
+	/**
+	 * 
+	 * @param expression
+	 */
 	public static void parse(String expression) {
 		ErrorListener listener = new ErrorListener();
 		FloraExpressionLexer lexer = new FloraExpressionLexer(CharStreams.fromString(expression));
 		lexer.removeErrorListeners();
-//		lexer.addErrorListener(new DiagnosticErrorListener(true));
+		// lexer.addErrorListener(new DiagnosticErrorListener(true));
 		lexer.addErrorListener(listener);
 		CommonTokenStream tokens = new CommonTokenStream(lexer);
 		FloraExpressionParser parser = new FloraExpressionParser(tokens);
 		parser.removeErrorListeners();
-//		parser.addErrorListener(new DiagnosticErrorListener(true));
+		// parser.addErrorListener(new DiagnosticErrorListener(true));
 		parser.addErrorListener(listener);
 		ParseTreeWalker walker = new ParseTreeWalker();
 		walker.walk(new FloraExpressioListener(), parser.calculations());
 	}
-	
-	public static ParseTree parseDemo(String expression) {
+
+	/**
+	 * 解析表达式并通过 GUI 展示语法树,用于手工检验解析的语法树是否正确.
+	 * 
+	 * @param expression 被解析的表达式
+	 */
+	public static void showGui(String expression) {
 		ErrorListener listener = new ErrorListener();
-		DemoLexer lexer = new DemoLexer(CharStreams.fromString(expression));
+		FloraExpressionLexer lexer = new FloraExpressionLexer(CharStreams.fromString(expression));
 		lexer.removeErrorListeners();
 		lexer.addErrorListener(listener);
 		CommonTokenStream tokens = new CommonTokenStream(lexer);
-		DemoParser parser = new DemoParser(tokens);
+		FloraExpressionParser parser = new FloraExpressionParser(tokens);
 		parser.removeErrorListeners();
 		parser.addErrorListener(listener);
-		return parser.expressions();
+		ParseTreeWalker walker = new ParseTreeWalker();
+		walker.walk(new FloraExpressioListener(), parser.calculations());
+		parser.reset();
+		Trees.inspect(parser.calculations(), parser);
 	}
-	
+
 	public static void main(String[] args) {
-		parse("-2+22;");
+		// showGui("-2+(3)+(ABS((33+5)*6)-5);");
+		showGui("(2+5*3>=22.6 AND 123>[TABLE.FIELD]) OR ('55' <= '22' AND LOWER('25'+'32')> '55') AND 'str1'!='str2' AND 'str3'=='str4';");
 	}
 }
