@@ -21,23 +21,59 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.flora.expression;
+package org.flora.expression.antlr.visitor;
 
-import org.antlr.v4.runtime.tree.ParseTreeListener;
-import org.flora.expression.antlr.FloraExpressionBaseListener;
-import org.flora.expression.antlr.FloraExpressionParser;
+import org.antlr.v4.runtime.tree.ErrorNode;
+import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.ParseTreeVisitor;
+import org.antlr.v4.runtime.tree.RuleNode;
+import org.antlr.v4.runtime.tree.TerminalNode;
+import org.flora.expression.antlr.VisitorResolver;
 
 /**
- * 数据库类型数据源的 {@link ParseTreeListener} 实现.
+ * 语法解析树访问者的基类.
  * 
  * @author 7cat
  * @since 1.0
  */
-public class FloraExpressioListener extends FloraExpressionBaseListener {
+public class BaseParseTreeVisitor implements ParseTreeVisitor<String> {
+
+	private VisitorResolver visitorResolver;
+
+	public BaseParseTreeVisitor(VisitorResolver visitorResolver) {
+		this.visitorResolver = visitorResolver;
+	}
+
+	/**
+	 * @param parseTree
+	 * @return
+	 */
+	protected String accept(ParseTree parseTree) {
+		if (parseTree instanceof TerminalNode) {
+			return parseTree.getText();
+		}
+		else {
+			return parseTree.accept(visitorResolver.resolve(parseTree));
+		}
+	}
 
 	@Override
-	public void enterCalculations(FloraExpressionParser.CalculationsContext ctx) {
-		int i = ctx.getChildCount();
-		System.out.println(i);
+	public String visit(ParseTree tree) {
+		return null;
+	}
+
+	@Override
+	public String visitChildren(RuleNode node) {
+		return null;
+	}
+
+	@Override
+	public String visitTerminal(TerminalNode node) {
+		return null;
+	}
+
+	@Override
+	public String visitErrorNode(ErrorNode node) {
+		return null;
 	}
 }

@@ -29,6 +29,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.flora.expression.antlr.FloraExpressionLexer;
 import org.flora.expression.antlr.FloraExpressionParser;
+import org.flora.expression.antlr.visitor.FloraExpressionVisitor;
 
 /**
  * @author 7cat
@@ -36,10 +37,6 @@ import org.flora.expression.antlr.FloraExpressionParser;
  */
 public final class ExpressionUtils {
 
-	/**
-	 * 
-	 * @param expression
-	 */
 	public static void parse(String expression) {
 		ErrorListener listener = new ErrorListener();
 		FloraExpressionLexer lexer = new FloraExpressionLexer(CharStreams.fromString(expression));
@@ -52,6 +49,7 @@ public final class ExpressionUtils {
 		// parser.addErrorListener(new DiagnosticErrorListener(true));
 		parser.addErrorListener(listener);
 		ParseTreeWalker walker = new ParseTreeWalker();
+		// parser.calculations().accept(visitor)
 		walker.walk(new FloraExpressioListener(), parser.calculations());
 	}
 
@@ -75,9 +73,26 @@ public final class ExpressionUtils {
 		Trees.inspect(parser.calculations(), parser);
 	}
 
+	public static String translate(String expression) {
+		ErrorListener listener = new ErrorListener();
+		FloraExpressionLexer lexer = new FloraExpressionLexer(CharStreams.fromString(expression));
+		lexer.removeErrorListeners();
+		lexer.addErrorListener(listener);
+		CommonTokenStream tokens = new CommonTokenStream(lexer);
+		FloraExpressionParser parser = new FloraExpressionParser(tokens);
+		parser.removeErrorListeners();
+		parser.addErrorListener(listener);
+		return parser.calculations().accept(new FloraExpressionVisitor());
+	}
+
 	public static void main(String[] args) {
 		// showGui("-2+(3)+(ABS((33+5)*6)-5);");
-		showGui("(2+5*3>=22.6 AND 123>[TABLE.FIELD]) OR ('55' <= '22' AND LOWER('25'+'32')> '55') AND 'str1'!='str2' AND 'str3'=='str4' AND NATIVE('CONCAT','STR1','STR2')>'32';");
-//		showGui("NATIVE('CONCAT','str1',23.22,#2018-02-02#);");
+		// showGui("(-2+5*3>=22.6 AND 123>[TABLE.FIELD]) OR ('55' <= '22' AND LOWER('25'+'32')> '55') AND 'str1'<>'str2'
+		// AND 'str3'='str4' AND NATIVE('CONCAT','STR1','STR2')>'32';");
+		// showGui("NATIVE('CONCAT','str1',23.22,#2018-02-02#);");
+		// showGui("'23'+ LOWER('ABC') + [TABLE.FIELD];");
+
+		System.out.println(translate("NATIVE('LOWER', '23333');"));
+		showGui("NATIVE('LOWER', '23333');");
 	}
 }

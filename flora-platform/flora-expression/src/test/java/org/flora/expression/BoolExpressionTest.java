@@ -36,7 +36,7 @@ public class BoolExpressionTest {
 		// arithmetic
 		ExpressionUtils.parse("15>25;");
 		ExpressionUtils.parse("15<25;");
-		ExpressionUtils.parse("15==15;");
+		ExpressionUtils.parse("15=15;");
 		ExpressionUtils.parse("15>=25;");
 		ExpressionUtils.parse("15>=25 OR 15<5;");
 		ExpressionUtils.parse("(15>=25) OR 15<5;");

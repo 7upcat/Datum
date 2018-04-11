@@ -21,23 +21,22 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.flora.expression;
+package org.flora.expression.antlr;
 
-import org.antlr.v4.runtime.tree.ParseTreeListener;
-import org.flora.expression.antlr.FloraExpressionBaseListener;
-import org.flora.expression.antlr.FloraExpressionParser;
+import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
 /**
- * 数据库类型数据源的 {@link ParseTreeListener} 实现.
+ * 根据当前的解析上下文来解析适合的解析树访问者.
  * 
  * @author 7cat
  * @since 1.0
  */
-public class FloraExpressioListener extends FloraExpressionBaseListener {
+public interface VisitorResolver {
 
-	@Override
-	public void enterCalculations(FloraExpressionParser.CalculationsContext ctx) {
-		int i = ctx.getChildCount();
-		System.out.println(i);
-	}
+	/**
+	 * @param context 解析上下文件
+	 * @return 适用于当前解析上下文的解析树访问者
+	 */
+	ParseTreeVisitor<String> resolve(ParseTree context);
 }

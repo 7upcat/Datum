@@ -21,23 +21,41 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.flora.expression;
+package org.flora.expression.antlr.visitor;
 
-import org.antlr.v4.runtime.tree.ParseTreeListener;
-import org.flora.expression.antlr.FloraExpressionBaseListener;
-import org.flora.expression.antlr.FloraExpressionParser;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.RuleNode;
+import org.flora.expression.antlr.VisitorResolver;
 
 /**
- * 数据库类型数据源的 {@link ParseTreeListener} 实现.
+ * 字符型函数节点的解析树访问者实现.
  * 
  * @author 7cat
  * @since 1.0
  */
-public class FloraExpressioListener extends FloraExpressionBaseListener {
+public class FunctionsReturningStringsVisitor extends BaseParseTreeVisitor {
+
+	public FunctionsReturningStringsVisitor(VisitorResolver visitorResolver) {
+		super(visitorResolver);
+	}
 
 	@Override
-	public void enterCalculations(FloraExpressionParser.CalculationsContext ctx) {
-		int i = ctx.getChildCount();
-		System.out.println(i);
+	public String visitChildren(RuleNode node) {
+		// child 为具体的函数
+		ParseTree func = node.getChild(0);
+		int count = func.getChildCount();
+		String functionName = func.getChild(0).getText();
+		List<String> params = new ArrayList<>();
+
+		// 函数名 (参数1,参数2,参数n);
+		for (int i = 2; count > 3 && i < count; i += 2) {
+			ParseTree paramNode = func.getChild(i);
+			params.add(accept(paramNode));
+		}
+
+		return functionName + "(" + String.join(",", params) + ")";
 	}
 }

@@ -21,23 +21,42 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.flora.expression;
+package org.flora.expression.antlr.visitor;
 
-import org.antlr.v4.runtime.tree.ParseTreeListener;
-import org.flora.expression.antlr.FloraExpressionBaseListener;
-import org.flora.expression.antlr.FloraExpressionParser;
+import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.RuleNode;
+import org.antlr.v4.runtime.tree.TerminalNode;
+import org.flora.expression.antlr.VisitorResolver;
 
 /**
- * 数据库类型数据源的 {@link ParseTreeListener} 实现.
+ * 字符表达式节点的解析树访问者实现.
  * 
  * @author 7cat
  * @since 1.0
  */
-public class FloraExpressioListener extends FloraExpressionBaseListener {
+public class StringExpressionVisitor extends BaseParseTreeVisitor {
+
+	public StringExpressionVisitor(VisitorResolver visitorResolver) {
+		super(visitorResolver);
+	}
 
 	@Override
-	public void enterCalculations(FloraExpressionParser.CalculationsContext ctx) {
-		int i = ctx.getChildCount();
-		System.out.println(i);
+	public String visitChildren(RuleNode node) {
+		StringBuffer sb = new StringBuffer();
+		int count = node.getChildCount();
+		if (count == 3) {
+			ParseTree left = node.getChild(0);
+			ParseTree right = node.getChild(2);
+			sb.append(String.format("CONCAT(%s , %s)", new Object[] { accept(left), accept(right) }));
+		}
+		else {
+
+			for (int i = 0; i < count; i++) {
+				ParseTree child = node.getChild(i);
+				sb.append((child instanceof TerminalNode) ? child.getText() : accept(child));
+			}
+
+		}
+		return sb.toString();
 	}
 }

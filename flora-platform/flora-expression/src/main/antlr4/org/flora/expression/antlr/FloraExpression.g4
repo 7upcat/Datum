@@ -4,7 +4,7 @@ import FloraExpressionCommonLexer;
 
 
 calculations : 
-    (arithmetic_expression|string_expression|date_expression|bool_expression|native_expression) ';'
+    (native_expression|arithmetic_expression|string_expression|date_expression|bool_expression) ';'
     |comment_expression
 ;
 
@@ -30,13 +30,14 @@ div :
 numeric_literal : NUMBER;
 
 string_expression :
-    string_expression ('+') string_expression
-    | string_literal
+    string_literal
     | functions_returning_strings
+    | string_expression '+' string_expression
     | field
     | native_expression
-    | '(' string_expression ')'
 ;
+
+//concat_string:  
 
 functions_returning_strings :
     lower
@@ -55,7 +56,7 @@ date_expression :
     | '(' date_expression ')'
 ;
 
-date_literal : DATE;
+date_literal : '#' DATE '#';
 
 bool_expression :
     arithmetic_expression ( COMPARISON_OPERATOR ) ( arithmetic_expression|field|native_expression )

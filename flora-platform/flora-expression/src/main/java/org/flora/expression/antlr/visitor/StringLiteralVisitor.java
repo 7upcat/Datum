@@ -21,23 +21,25 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.flora.expression;
+package org.flora.expression.antlr.visitor;
 
-import org.antlr.v4.runtime.tree.ParseTreeListener;
-import org.flora.expression.antlr.FloraExpressionBaseListener;
-import org.flora.expression.antlr.FloraExpressionParser;
+import org.antlr.v4.runtime.tree.RuleNode;
+import org.flora.expression.antlr.VisitorResolver;
 
 /**
- * 数据库类型数据源的 {@link ParseTreeListener} 实现.
+ * 字符字面量节点的解析树访问者实现.
  * 
  * @author 7cat
  * @since 1.0
  */
-public class FloraExpressioListener extends FloraExpressionBaseListener {
+public class StringLiteralVisitor extends BaseParseTreeVisitor {
+
+	public StringLiteralVisitor(VisitorResolver visitorResolver) {
+		super(visitorResolver);
+	}
 
 	@Override
-	public void enterCalculations(FloraExpressionParser.CalculationsContext ctx) {
-		int i = ctx.getChildCount();
-		System.out.println(i);
+	public String visitChildren(RuleNode node) {
+		return node.getChild(0).getText();
 	}
 }
