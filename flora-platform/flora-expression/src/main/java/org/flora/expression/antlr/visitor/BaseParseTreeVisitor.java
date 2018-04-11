@@ -44,10 +44,6 @@ public class BaseParseTreeVisitor implements ParseTreeVisitor<String> {
 		this.visitorResolver = visitorResolver;
 	}
 
-	/**
-	 * @param parseTree
-	 * @return
-	 */
 	protected String accept(ParseTree parseTree) {
 		if (parseTree instanceof TerminalNode) {
 			return parseTree.getText();

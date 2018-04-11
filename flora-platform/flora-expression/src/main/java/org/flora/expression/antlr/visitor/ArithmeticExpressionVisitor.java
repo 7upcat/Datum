@@ -26,36 +26,27 @@ package org.flora.expression.antlr.visitor;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.RuleNode;
 import org.flora.expression.antlr.VisitorResolver;
 
 /**
- * 字符型函数节点的解析树访问者实现.
+ * 运算表达式节点的解析树访问者实现.
  * 
  * @author 7cat
  * @since 1.0
  */
-public class FunctionsReturningStringsVisitor extends BaseParseTreeVisitor {
+public class ArithmeticExpressionVisitor extends BaseParseTreeVisitor {
 
-	public FunctionsReturningStringsVisitor(VisitorResolver visitorResolver) {
+	public ArithmeticExpressionVisitor(VisitorResolver visitorResolver) {
 		super(visitorResolver);
 	}
 
 	@Override
 	public String visitChildren(RuleNode node) {
-		// child 为具体的函数
-		ParseTree func = node.getChild(0);
-		int count = func.getChildCount();
-		String functionName = func.getChild(0).getText();
-		List<String> params = new ArrayList<>();
-
-		// 函数名 (参数1,参数2,参数n);
-		for (int i = 2; count > 3 && i < count; i += 2) {
-			ParseTree paramNode = func.getChild(i);
-			params.add(accept(paramNode));
+		List<String> expressions = new ArrayList<>();
+		for (int i = 0; i < node.getChildCount(); i++) {
+			expressions.add(accept(node.getChild(i)));
 		}
-
-		return functionName + "(" + String.join(",", params) + ")";
+		return String.join(" ", expressions);
 	}
 }

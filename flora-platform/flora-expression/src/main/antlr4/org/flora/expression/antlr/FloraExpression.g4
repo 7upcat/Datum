@@ -37,8 +37,6 @@ string_expression :
     | native_expression
 ;
 
-//concat_string:  
-
 functions_returning_strings :
     lower
 ;
@@ -51,12 +49,9 @@ date_expression :
     date_expression ( '+'|'-' ) arithmetic_expression
     | date_expression ( '+'|'-' ) field
     | date_literal
-    | field
-    | native_expression
-    | '(' date_expression ')'
 ;
 
-date_literal : '#' DATE '#';
+date_literal : '#' DATE '#' ;
 
 bool_expression :
     arithmetic_expression ( COMPARISON_OPERATOR ) ( arithmetic_expression|field|native_expression )

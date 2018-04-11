@@ -21,39 +21,19 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.flora.expression.antlr.visitor;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.RuleNode;
-import org.flora.expression.antlr.VisitorResolver;
+package org.flora.expression.common;
 
 /**
- * 原生函数节点的解析树访问者实现.
+ * 模块代码为'EL'
  * 
  * @author 7cat
  * @since 1.0
  */
-public class NativeExpressionVisitor extends BaseParseTreeVisitor {
+public final class ErrorCodes {
 
-	public NativeExpressionVisitor(VisitorResolver visitorResolver) {
-		super(visitorResolver);
-	}
-
-	@Override
-	public String visitChildren(RuleNode node) {
-		List<String> params = new ArrayList<>();
-		int count = node.getChildCount();
-
-		// 函数名 (参数1,参数2,参数n);
-		for (int i = 2; count > 3 && i < count; i += 2) {
-			ParseTree paramNode = node.getChild(i);
-			params.add(accept(paramNode));
-		}
-
-		return params.get(0).replaceAll("'", "") + " ( " + String.join(",", params.subList(1, params.size())) + " )";
-	}
-
+	/** 表达式语法错误. */
+	public static final String EXPRESSION_SYNTAX_ERROR = "EREL0101";
+	
+	/** 表达式存在歧义. */
+	public static final String EXPRESSION_AMBIGUITY_ERROR = "EREL0102";
 }

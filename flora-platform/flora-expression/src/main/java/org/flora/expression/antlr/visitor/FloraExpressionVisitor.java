@@ -31,9 +31,14 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 import org.antlr.v4.runtime.tree.RuleNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
+import org.flora.expression.antlr.FloraExpressionParser.Arithmetic_expressionContext;
+import org.flora.expression.antlr.FloraExpressionParser.Bool_expressionContext;
+import org.flora.expression.antlr.FloraExpressionParser.Date_expressionContext;
 import org.flora.expression.antlr.FloraExpressionParser.FieldContext;
+import org.flora.expression.antlr.FloraExpressionParser.Functions_returning_numericsContext;
 import org.flora.expression.antlr.FloraExpressionParser.Functions_returning_stringsContext;
 import org.flora.expression.antlr.FloraExpressionParser.Native_expressionContext;
+import org.flora.expression.antlr.FloraExpressionParser.Numeric_literalContext;
 import org.flora.expression.antlr.FloraExpressionParser.String_expressionContext;
 import org.flora.expression.antlr.FloraExpressionParser.String_literalContext;
 import org.flora.expression.antlr.VisitorResolver;
@@ -50,13 +55,29 @@ public class FloraExpressionVisitor implements VisitorResolver, ParseTreeVisitor
 	private Map<String, ParseTreeVisitor<String>> visitorMapping = new HashMap<>();
 
 	public FloraExpressionVisitor() {
-		visitorMapping.put(String_literalContext.class.getTypeName(), new StringLiteralVisitor(this));
-		visitorMapping.put(Functions_returning_stringsContext.class.getTypeName(),
-				new FunctionsReturningStringsVisitor(this));
-		visitorMapping.put(String_expressionContext.class.getTypeName(), new StringExpressionVisitor(this));
+
+		// common part
 		visitorMapping.put(FieldContext.class.getTypeName(), new FieldVisitor(this));
+
+		// native expression
 		visitorMapping.put(Native_expressionContext.class.getTypeName(), new NativeExpressionVisitor(this));
-		visitorMapping.put(Native_expressionContext.class.getTypeName(), new NativeExpressionVisitor(this));
+
+		// string expression
+		visitorMapping.put(String_literalContext.class.getTypeName(), new StringLiteralVisitor(this));
+		visitorMapping.put(Functions_returning_stringsContext.class.getTypeName(), new FunctionsVisitor(this));
+		visitorMapping.put(String_expressionContext.class.getTypeName(), new StringExpressionVisitor(this));
+
+		// arithmetic expression
+		visitorMapping.put(Arithmetic_expressionContext.class.getTypeName(), new ArithmeticExpressionVisitor(this));
+		visitorMapping.put(Functions_returning_numericsContext.class.getTypeName(), new FunctionsVisitor(this));
+		visitorMapping.put(Numeric_literalContext.class.getTypeName(), new NumericLiteralVisitor(this));
+		
+		// date expression
+		visitorMapping.put(Date_expressionContext.class.getTypeName(), new DateExpressionVisitor(this));
+		
+		// bool expression
+		
+		visitorMapping.put(Bool_expressionContext.class.getTypeName(), new BoolExpressionVisitor(this));
 	}
 
 	@Override
@@ -75,16 +96,16 @@ public class FloraExpressionVisitor implements VisitorResolver, ParseTreeVisitor
 
 	@Override
 	public String visit(ParseTree tree) {
-		throw new UnsupportedOperationException("Auto-generated method stub");
+		throw new UnsupportedOperationException("不支持此操作.");
 	}
 
 	@Override
 	public String visitTerminal(TerminalNode node) {
-		throw new UnsupportedOperationException("Auto-generated method stub");
+		throw new UnsupportedOperationException("不支持此操作.");
 	}
 
 	@Override
 	public String visitErrorNode(ErrorNode node) {
-		throw new UnsupportedOperationException("Auto-generated method stub");
+		throw new UnsupportedOperationException("不支持此操作.");
 	}
 }

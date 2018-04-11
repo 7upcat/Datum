@@ -24,16 +24,19 @@
 package org.flora.expression;
 
 /**
- * 模块代码为'EL'
+ * 根据求值计算上下文的信息解析求值表达式.
  * 
  * @author 7cat
  * @since 1.0
  */
-public final class ErrorCodes {
+public interface CalculationExpressionParser<Expression> {
 
-	/** 表达式语法错误. */
-	public static final String EXPRESSION_SYNTAX_ERROR = "EREL0101";
-	
-	/** 表达式存在歧义. */
-	public static final String EXPRESSION_AMBIGUITY_ERROR = "EREL0102";
+	/**
+	 * 将求值表达式转换成可以被 OLAP 引擎识别的数据结构.
+	 * 
+	 * @param expression 字符串类型的求值表达式
+	 * @param context 求值计算上下文
+	 * @return 解析生成的求值表达式
+	 */
+	Expression eval(String expression, CalculationContext context);
 }

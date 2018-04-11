@@ -21,60 +21,41 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.flora.expression;
+package org.flora.expression.antlr.visitor;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 import org.antlr.v4.runtime.tree.RuleNode;
-import org.antlr.v4.runtime.tree.TerminalNode;
-import org.flora.expression.antlr.FloraExpressionParser;
+import org.flora.expression.antlr.VisitorResolver;
 
 /**
+ * 字符型函数节点的解析树访问者实现.
+ * 
  * @author 7cat
  * @since 1.0
  */
-public class StringExpressionVisitor implements ParseTreeVisitor<String> {
+public class FunctionsVisitor extends BaseParseTreeVisitor {
 
-	@Override
-	public String visit(ParseTree tree) {
-		return tree.accept(this);
+	public FunctionsVisitor(VisitorResolver visitorResolver) {
+		super(visitorResolver);
 	}
 
 	@Override
 	public String visitChildren(RuleNode node) {
-		List<String> result = defaultResult();
-		int n = node.getChildCount();
-		if (node instanceof FloraExpressionParser.String_expressionContext && n == 3) {
-			String left =  node.getChild(0).accept(this) ;
-			String right =  node.getChild(2).accept(this) ;
-			return String.format("CONCAT(%s,%s)", new Object[] {},
-					node.getChild(2).accept(this));
+		// child 为具体的函数
+		ParseTree func = node.getChild(0);
+		int count = func.getChildCount();
+		String functionName = func.getChild(0).getText();
+		List<String> params = new ArrayList<>();
+
+		// 函数名 (参数1,参数2,参数n);
+		for (int i = 2; count > 3 && i < count; i += 2) {
+			ParseTree paramNode = func.getChild(i);
+			params.add(accept(paramNode));
 		}
-		else {
-			for (int i = 0; i < n; i++) {
-				String childResult = node.getChild(i).accept(this);
-				result.add(childResult);
-			}
-			return String.join(" ", result);
-		}
-	}
 
-	@Override
-	public String visitTerminal(TerminalNode node) {
-		return node.getText();
+		return functionName + "(" + String.join(",", params) + ")";
 	}
-
-	@Override
-	public String visitErrorNode(ErrorNode node) {
-		return null;
-	}
-
-	private List<String> defaultResult() {
-		return new ArrayList<>();
-	}
-
 }

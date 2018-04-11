@@ -21,17 +21,13 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.flora.expression;
-
-import java.util.BitSet;
+package org.flora.expression.antlr;
 
 import org.antlr.v4.runtime.BaseErrorListener;
-import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
-import org.antlr.v4.runtime.atn.ATNConfigSet;
-import org.antlr.v4.runtime.dfa.DFA;
 import org.flora.FloraException;
+import org.flora.expression.common.ErrorCodes;
 
 /**
  * 语法解析错误监听器,在任何异常出现时都会抛出 {@link FloraException}.
@@ -47,22 +43,4 @@ public class ErrorListener extends BaseErrorListener {
 		throw new FloraException(ErrorCodes.EXPRESSION_SYNTAX_ERROR,
 				"line " + line + ":" + charPositionInLine + " at " + offendingSymbol + ": " + msg);
 	}
-	
-	@Override
-	public void reportAmbiguity(Parser recognizer, DFA dfa, int startIndex, int stopIndex, boolean exact,
-			BitSet ambigAlts, ATNConfigSet configs) {
-		System.out.println("reportAmbiguity");
 	}
-	
-	@Override
-	public void reportAttemptingFullContext(Parser recognizer, DFA dfa, int startIndex, int stopIndex,
-			BitSet conflictingAlts, ATNConfigSet configs) {
-		System.out.println("reportAttemptingFullContext");
-	}
-	
-	@Override
-	public void reportContextSensitivity(Parser recognizer, DFA dfa, int startIndex, int stopIndex, int prediction,
-			ATNConfigSet configs) {
-		System.out.println("reportContextSensitivity");
-	}
-}

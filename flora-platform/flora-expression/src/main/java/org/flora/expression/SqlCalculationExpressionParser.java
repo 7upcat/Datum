@@ -23,21 +23,37 @@
 
 package org.flora.expression;
 
-import org.antlr.v4.runtime.tree.ParseTreeListener;
-import org.flora.expression.antlr.FloraExpressionBaseListener;
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.flora.expression.antlr.ErrorListener;
+import org.flora.expression.antlr.FloraExpressionLexer;
 import org.flora.expression.antlr.FloraExpressionParser;
+import org.flora.expression.antlr.visitor.FloraExpressionVisitor;
 
 /**
- * 数据库类型数据源的 {@link ParseTreeListener} 实现.
+ * 将求值表达式解析成合法的 sql.
  * 
  * @author 7cat
  * @since 1.0
  */
-public class FloraExpressioListener extends FloraExpressionBaseListener {
+public class SqlCalculationExpressionParser implements CalculationExpressionParser<String> {
+
+	private ErrorListener listener = new ErrorListener();
 
 	@Override
-	public void enterCalculations(FloraExpressionParser.CalculationsContext ctx) {
-		int i = ctx.getChildCount();
-		System.out.println(i);
+	public String eval(String expression, CalculationContext context) {
+		FloraExpressionLexer lexer = new FloraExpressionLexer(CharStreams.fromString(expression));
+		lexer.removeErrorListeners();
+		// lexer.addErrorListener(new DiagnosticErrorListener(true));
+		lexer.addErrorListener(listener);
+		CommonTokenStream tokens = new CommonTokenStream(lexer);
+		FloraExpressionParser parser = new FloraExpressionParser(tokens);
+		parser.removeErrorListeners();
+		parser.addErrorListener(listener);
+		return parser.calculations().accept(new FloraExpressionVisitor());
+	}
+
+	public void setListener(ErrorListener listener) {
+		this.listener = listener;
 	}
 }

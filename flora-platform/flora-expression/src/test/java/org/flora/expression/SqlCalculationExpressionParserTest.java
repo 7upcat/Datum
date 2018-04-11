@@ -21,39 +21,29 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.flora.expression.antlr.visitor;
+package org.flora.expression;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.RuleNode;
-import org.flora.expression.antlr.VisitorResolver;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
- * 原生函数节点的解析树访问者实现.
- * 
  * @author 7cat
  * @since 1.0
  */
-public class NativeExpressionVisitor extends BaseParseTreeVisitor {
+public class SqlCalculationExpressionParserTest {
 
-	public NativeExpressionVisitor(VisitorResolver visitorResolver) {
-		super(visitorResolver);
-	}
+	CalculationExpressionParser<String> calculationExpressionParser = new SqlCalculationExpressionParser();
 
-	@Override
-	public String visitChildren(RuleNode node) {
-		List<String> params = new ArrayList<>();
-		int count = node.getChildCount();
-
-		// 函数名 (参数1,参数2,参数n);
-		for (int i = 2; count > 3 && i < count; i += 2) {
-			ParseTree paramNode = node.getChild(i);
-			params.add(accept(paramNode));
-		}
-
-		return params.get(0).replaceAll("'", "") + " ( " + String.join(",", params.subList(1, params.size())) + " )";
+	/**
+	 * Test method for
+	 * {@link org.flora.expression.SqlCalculationExpressionParser#eval(java.lang.String, org.flora.expression.CalculationContext)}.
+	 */
+	@Test
+	public void testEval() {
+		Assert.assertEquals(calculationExpressionParser.eval("2+2;", null), "2 + 2");
+		Assert.assertEquals(calculationExpressionParser.eval("[TABLE.FIELD1]+2;", null), "TABLE.FIELD1 + 2");
+		Assert.assertEquals(calculationExpressionParser.eval("#2018-03-02#;", null), "'2018-03-02'");
+		Assert.assertEquals(calculationExpressionParser.eval("NATIVE('ABS',-55)-22;", null), "ABS ( - 55 ) - 22");
 	}
 
 }

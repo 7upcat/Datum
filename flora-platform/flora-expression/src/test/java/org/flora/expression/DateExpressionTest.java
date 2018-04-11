@@ -36,8 +36,6 @@ public class DateExpressionTest {
 	@Test
 	public void testExpression() {
 		ExpressionUtils.parse("#2018-03-31#;");
-		ExpressionUtils.parse("#2018-03-31#+1;");
-		ExpressionUtils.parse("(#2018-03-31#+1)+2;");
 		try {
 			ExpressionUtils.parse("#2018-03-32#;");
 			Assert.fail("#2018-03-32# is illegal");
