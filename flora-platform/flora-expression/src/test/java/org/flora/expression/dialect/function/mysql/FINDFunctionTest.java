@@ -21,25 +21,27 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.flora.expression;
+package org.flora.expression.dialect.function.mysql;
 
-import org.flora.expression.dialect.Dialect;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 /**
- * 表达式解析上下文.
- * 
  * @author 7cat
  * @since 1.0
  */
-public class CalculationContext {
+public class FINDFunctionTest {
 
-	private Dialect dialect;
+	/**
+	 * Test method for {@link org.flora.expression.dialect.function.mysql.FINDFunction#render(java.lang.String[])}.
+	 */
+	@Test
+	public void testRender() {
 
-	public Dialect getDialect() {
-		return dialect;
+		FINDFunction findFunction = new FINDFunction();
+		assertEquals("LOCATE ( 'bar', 'foobarbar' )", findFunction.render("'foobarbar'", "'bar'"));
+		assertEquals("LOCATE ( 'bar', 'foobarbar', 2 )", findFunction.render("'foobarbar'", "'bar'", "2"));
 	}
 
-	public void setDialect(Dialect dialect) {
-		this.dialect = dialect;
-	}
 }

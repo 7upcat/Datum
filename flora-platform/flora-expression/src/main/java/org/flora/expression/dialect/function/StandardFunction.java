@@ -21,25 +21,50 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.flora.expression;
-
-import org.flora.expression.dialect.Dialect;
+package org.flora.expression.dialect.function;
 
 /**
- * 表达式解析上下文.
+ * 标准函数实现.
  * 
  * @author 7cat
  * @since 1.0
  */
-public class CalculationContext {
+public class StandardFunction implements Function {
 
-	private Dialect dialect;
+	/** 函数名称. */
+	private String name;
 
-	public Dialect getDialect() {
-		return dialect;
+	private boolean hasParentheses = true;
+
+	public StandardFunction(String name) {
+		this.name = name;
 	}
 
-	public void setDialect(Dialect dialect) {
-		this.dialect = dialect;
+	public StandardFunction(String name, boolean hasParentheses) {
+		this.name = name;
+		this.hasParentheses = hasParentheses;
 	}
+
+	@Override
+	public String render(String... arguments) {
+		StringBuffer function = new StringBuffer();
+		function.append(this.name);
+		if (arguments == null) {
+			if (hasParentheses) {
+				function.append(" () ");
+			}
+		}
+		else {
+			function.append(" ( ");
+			for (int i = 0; i < arguments.length; i++) {
+				function.append(arguments[i]);
+				if (i != arguments.length - 1) {
+					function.append(", ");
+				}
+			}
+			function.append(" )");
+		}
+		return function.toString();
+	}
+
 }

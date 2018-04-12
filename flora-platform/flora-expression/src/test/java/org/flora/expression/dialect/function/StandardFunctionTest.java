@@ -21,25 +21,23 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.flora.expression;
+package org.flora.expression.dialect.function;
 
-import org.flora.expression.dialect.Dialect;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 /**
- * 表达式解析上下文.
- * 
  * @author 7cat
  * @since 1.0
  */
-public class CalculationContext {
+public class StandardFunctionTest {
 
-	private Dialect dialect;
-
-	public Dialect getDialect() {
-		return dialect;
-	}
-
-	public void setDialect(Dialect dialect) {
-		this.dialect = dialect;
+	@Test
+	public void testRender() {
+		StandardFunction abs = new StandardFunction("ABS");
+		assertEquals("ABS ( -55 )", abs.render("-55"));
+		StandardFunction right = new StandardFunction("RIGHT");
+		assertEquals("RIGHT ( '123456', 6 )", right.render("'123456'", "6"));
 	}
 }

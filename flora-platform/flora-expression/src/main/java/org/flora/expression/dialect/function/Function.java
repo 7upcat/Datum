@@ -21,25 +21,21 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.flora.expression;
-
-import org.flora.expression.dialect.Dialect;
+package org.flora.expression.dialect.function;
 
 /**
- * 表达式解析上下文.
+ * 对函数的抽象.
  * 
  * @author 7cat
  * @since 1.0
  */
-public class CalculationContext {
+public interface Function {
 
-	private Dialect dialect;
-
-	public Dialect getDialect() {
-		return dialect;
-	}
-
-	public void setDialect(Dialect dialect) {
-		this.dialect = dialect;
-	}
+	/**
+	 * 根据指定的参数渲染函数.
+	 * 
+	 * @param arguments 函数参数列表
+	 * @return 渲染的函数
+	 */
+	String render(String... arguments);
 }

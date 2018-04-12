@@ -21,25 +21,15 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.flora.expression;
-
-import org.flora.expression.dialect.Dialect;
+package org.flora.expression.dialect;
 
 /**
- * 表达式解析上下文.
+ * 不同的数据源（数据库产品）的函数、SQL不同,此接口用来屏蔽数据库的差异.
  * 
  * @author 7cat
  * @since 1.0
  */
-public class CalculationContext {
+public interface Dialect {
 
-	private Dialect dialect;
-
-	public Dialect getDialect() {
-		return dialect;
-	}
-
-	public void setDialect(Dialect dialect) {
-		this.dialect = dialect;
-	}
+	String renderFunction(String name, String... arguments);
 }

@@ -21,25 +21,20 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.flora.expression;
+package org.flora.expression.dialect.function.mysql;
 
-import org.flora.expression.dialect.Dialect;
+import org.flora.expression.dialect.function.Function;
 
 /**
- * 表达式解析上下文.
- * 
  * @author 7cat
  * @since 1.0
  */
-public class CalculationContext {
+public class FINDFunction implements Function {
 
-	private Dialect dialect;
-
-	public Dialect getDialect() {
-		return dialect;
+	@Override
+	public String render(String... arguments) {
+		return "LOCATE ( " + arguments[1] + ", " + arguments[0] + (arguments.length == 3 ? ", " + arguments[2] : "")
+				+ " )";
 	}
 
-	public void setDialect(Dialect dialect) {
-		this.dialect = dialect;
-	}
 }

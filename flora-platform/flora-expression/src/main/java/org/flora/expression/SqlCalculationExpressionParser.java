@@ -44,7 +44,6 @@ public class SqlCalculationExpressionParser implements CalculationExpressionPars
 	public String eval(String expression, CalculationContext context) {
 		FloraExpressionLexer lexer = new FloraExpressionLexer(CharStreams.fromString(expression));
 		lexer.removeErrorListeners();
-		// lexer.addErrorListener(new DiagnosticErrorListener(true));
 		lexer.addErrorListener(listener);
 		CommonTokenStream tokens = new CommonTokenStream(lexer);
 		FloraExpressionParser parser = new FloraExpressionParser(tokens);
