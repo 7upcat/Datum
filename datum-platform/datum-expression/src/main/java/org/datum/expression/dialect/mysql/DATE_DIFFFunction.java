@@ -21,7 +21,7 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.datum.expression.dialect.function.mysql;
+package org.datum.expression.dialect.mysql;
 
 import org.datum.expression.dialect.function.Function;
 
@@ -29,12 +29,12 @@ import org.datum.expression.dialect.function.Function;
  * @author 7cat
  * @since 1.0
  */
-public class FINDFunction implements Function {
+public class DATE_DIFFFunction implements Function {
 
 	@Override
 	public String render(String... arguments) {
-		return "LOCATE ( " + arguments[1] + ", " + arguments[0] + (arguments.length == 3 ? ", " + arguments[2] : "")
-				+ " )";
+		return String.format("DATE_DIFF ( %s, %s )",
+				new Object[]{arguments[0], arguments[1]});
 	}
 
 }

@@ -21,17 +21,17 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.datum.expression.dialect;
+package org.datum.expression.dialect.mysql;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import org.datum.expression.dialect.Dialect;
+import org.datum.expression.dialect.function.CONTAINSFunction;
+import org.datum.expression.dialect.function.ENDSWITHFunction;
 import org.datum.expression.dialect.function.Function;
+import org.datum.expression.dialect.function.STARTSWITHFunction;
 import org.datum.expression.dialect.function.StandardFunction;
-import org.datum.expression.dialect.function.mysql.CONTAINSFunction;
-import org.datum.expression.dialect.function.mysql.ENDSWITHFunction;
-import org.datum.expression.dialect.function.mysql.FINDFunction;
-import org.datum.expression.dialect.function.mysql.STARTSWITHFunction;
 
 /**
  * MYSQL 数据库的方言.
@@ -90,6 +90,16 @@ public class MYSQLDialect implements Dialect {
 		functionMapping.put("STARTSWITH", new STARTSWITHFunction());
 		functionMapping.put("TRIM", new StandardFunction("TRIM"));
 		functionMapping.put("UPPER", new StandardFunction("UPPER"));
+
+		// 日期函数,暂不支持 DATENAME、DATETRUNC、MAKEDATE、MAKEDATETIME、MAKETIME、MAX、MIN
+		functionMapping.put("DATE_ADD", new DATE_ADDFunction());
+		functionMapping.put("DATE_SUB", new DATE_SUBFunction());
+		functionMapping.put("DATE_PART", new DATEPARTFunction());
+		functionMapping.put("DAYOFMONTH", new StandardFunction("DAYOFMONTH"));
+		functionMapping.put("MONTH", new StandardFunction("MONTH"));
+		functionMapping.put("NOW", new StandardFunction("NOW"));
+		functionMapping.put("TODAY", new StandardFunction("CURDATE"));
+		functionMapping.put("YEAR", new StandardFunction("YEAR"));
 	}
 
 	@Override

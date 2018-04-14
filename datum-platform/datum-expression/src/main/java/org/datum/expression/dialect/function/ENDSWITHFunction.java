@@ -21,30 +21,19 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.datum.expression.dialect.function.mysql;
-
-import org.junit.Test;
-
-import static org.junit.Assert.*;
-
-import org.datum.expression.dialect.function.mysql.CONTAINSFunction;
-
+package org.datum.expression.dialect.function;
 
 /**
- * 
  * @author 7cat
  * @since 1.0
  */
-public class CONTAINSFunctionTest {
+public class ENDSWITHFunction implements Function {
 
-	/**
-	 * Test method for {@link org.datum.expression.dialect.function.mysql.CONTAINSFunction#render(java.lang.String[])}.
-	 */
-	@Test
-	public void testRender() {
-		CONTAINSFunction containsFunction = new CONTAINSFunction();
-		
-		assertEquals("TABLE.FIELD1 LIKE '%ABCD%'", containsFunction.render("TABLE.FIELD1","'ABCD'"));
+	@Override
+	public String render(String... arguments) {
+		StringBuilder builder = new StringBuilder(arguments[1]);
+		builder.replace(arguments[1].lastIndexOf("'"), arguments[1].lastIndexOf("'") + 1, "%'");
+		return arguments[0] + " LIKE " + builder.toString();
 	}
 
 }

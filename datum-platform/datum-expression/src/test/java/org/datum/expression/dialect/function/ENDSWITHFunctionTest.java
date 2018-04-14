@@ -21,30 +21,26 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.datum.expression.dialect.function.mysql;
+package org.datum.expression.dialect.function;
 
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-import org.datum.expression.dialect.function.mysql.STARTSWITHFunction;
-
+import org.datum.expression.dialect.function.ENDSWITHFunction;
 
 /**
  * 
  * @author 7cat
  * @since 1.0
  */
-public class STARTSWITHFunctionTest {
+public class ENDSWITHFunctionTest {
 
-	/**
-	 * Test method for {@link org.datum.expression.dialect.function.mysql.STARTSWITHFunction#render(java.lang.String[])}.
-	 */
 	@Test
 	public void testRender() {
-		STARTSWITHFunction startswithFunction = new STARTSWITHFunction();
+		ENDSWITHFunction endsWithFunction = new ENDSWITHFunction();
 
-		assertEquals("TABLE.FIELD1 LIKE '%ABCD'", startswithFunction.render("TABLE.FIELD1", "'ABCD'"));
+		assertEquals("TABLE.FIELD1 LIKE 'ABCD%'", endsWithFunction.render("TABLE.FIELD1", "'ABCD'"));
 	}
 
 }

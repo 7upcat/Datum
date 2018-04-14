@@ -21,26 +21,24 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.datum.expression.dialect.function.mysql;
+package org.datum.expression.dialect.mysql;
 
-import org.junit.Test;
-
-import static org.junit.Assert.*;
-
-import org.datum.expression.dialect.function.mysql.ENDSWITHFunction;
+import org.datum.expression.dialect.function.Function;
 
 /**
+ * 参考 MYSQL 函数
+ * https://dev.mysql.com/doc/refman/5.7/en/date-and-time-functions.html#function_extract
  * 
  * @author 7cat
  * @since 1.0
  */
-public class ENDSWITHFunctionTest {
+public class DATEPARTFunction implements Function {
 
-	@Test
-	public void testRender() {
-		ENDSWITHFunction endsWithFunction = new ENDSWITHFunction();
-
-		assertEquals("TABLE.FIELD1 LIKE 'ABCD%'", endsWithFunction.render("TABLE.FIELD1", "'ABCD'"));
+	@Override
+	public String render(String... arguments) {
+		String date = arguments[0];
+		String unit = arguments[1];
+		return String.format("EXTRACT ( %s FROM %s )",
+				new Object[]{unit, date});
 	}
-
 }

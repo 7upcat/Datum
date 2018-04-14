@@ -23,23 +23,15 @@
 
 package org.datum.expression.dialect.function;
 
-import org.junit.Test;
-
-import static org.junit.Assert.*;
-
-import org.datum.expression.dialect.function.StandardFunction;
-
 /**
  * @author 7cat
  * @since 1.0
  */
-public class StandardFunctionTest {
+public class STARTSWITHFunction implements Function {
 
-	@Test
-	public void testRender() {
-		StandardFunction abs = new StandardFunction("ABS");
-		assertEquals("ABS ( -55 )", abs.render("-55"));
-		StandardFunction right = new StandardFunction("RIGHT");
-		assertEquals("RIGHT ( '123456', 6 )", right.render("'123456'", "6"));
+	@Override
+	public String render(String... arguments) {
+		return arguments[0] + " LIKE " + arguments[1].replaceFirst("'", "'%");
 	}
+
 }

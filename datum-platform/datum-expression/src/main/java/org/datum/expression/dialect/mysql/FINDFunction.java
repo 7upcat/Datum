@@ -21,29 +21,20 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.datum.expression.dialect.function.mysql;
+package org.datum.expression.dialect.mysql;
 
-import org.junit.Test;
-
-import static org.junit.Assert.*;
-
-import org.datum.expression.dialect.function.mysql.FINDFunction;
+import org.datum.expression.dialect.function.Function;
 
 /**
  * @author 7cat
  * @since 1.0
  */
-public class FINDFunctionTest {
+public class FINDFunction implements Function {
 
-	/**
-	 * Test method for {@link org.datum.expression.dialect.function.mysql.FINDFunction#render(java.lang.String[])}.
-	 */
-	@Test
-	public void testRender() {
-
-		FINDFunction findFunction = new FINDFunction();
-		assertEquals("LOCATE ( 'bar', 'foobarbar' )", findFunction.render("'foobarbar'", "'bar'"));
-		assertEquals("LOCATE ( 'bar', 'foobarbar', 2 )", findFunction.render("'foobarbar'", "'bar'", "2"));
+	@Override
+	public String render(String... arguments) {
+		return "LOCATE ( " + arguments[1] + ", " + arguments[0] + (arguments.length == 3 ? ", " + arguments[2] : "")
+				+ " )";
 	}
 
 }

@@ -21,19 +21,23 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.datum.expression.dialect.function.mysql;
+package org.datum.expression.dialect.mysql;
 
 import org.datum.expression.dialect.function.Function;
 
 /**
+ * 参考 MYSQL 函数:
+ * https://dev.mysql.com/doc/refman/5.7/en/date-and-time-functions.html#function_date-add
+ * 
  * @author 7cat
  * @since 1.0
  */
-public class STARTSWITHFunction implements Function {
+public class DATE_SUBFunction implements Function {
 
 	@Override
 	public String render(String... arguments) {
-		return arguments[0] + " LIKE " + arguments[1].replaceFirst("'", "'%");
+		return String.format("DATE_SUB ( %s, %s, %s )",
+				new Object[]{arguments[0], arguments[1], arguments[2]});
 	}
 
 }

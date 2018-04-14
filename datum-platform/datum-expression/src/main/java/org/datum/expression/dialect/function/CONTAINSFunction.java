@@ -21,9 +21,7 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.datum.expression.dialect.function.mysql;
-
-import org.datum.expression.dialect.function.Function;
+package org.datum.expression.dialect.function;
 
 /**
  * @author 7cat
