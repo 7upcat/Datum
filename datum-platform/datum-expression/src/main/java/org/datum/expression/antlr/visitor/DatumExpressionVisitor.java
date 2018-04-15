@@ -34,7 +34,10 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 import org.datum.expression.antlr.DatumExpressionParser.Arithmetic_expressionContext;
 import org.datum.expression.antlr.DatumExpressionParser.Bool_expressionContext;
 import org.datum.expression.antlr.DatumExpressionParser.Date_expressionContext;
+import org.datum.expression.antlr.DatumExpressionParser.Date_literalContext;
 import org.datum.expression.antlr.DatumExpressionParser.FieldContext;
+import org.datum.expression.antlr.DatumExpressionParser.Functions_returning_boolsContext;
+import org.datum.expression.antlr.DatumExpressionParser.Functions_returning_datesContext;
 import org.datum.expression.antlr.DatumExpressionParser.Functions_returning_numericsContext;
 import org.datum.expression.antlr.DatumExpressionParser.Functions_returning_stringsContext;
 import org.datum.expression.antlr.DatumExpressionParser.Native_expressionContext;
@@ -74,10 +77,12 @@ public class DatumExpressionVisitor implements VisitorResolver, ParseTreeVisitor
 		
 		// date expression
 		visitorMapping.put(Date_expressionContext.class.getTypeName(), new DateExpressionVisitor(this));
-		
+		visitorMapping.put(Functions_returning_datesContext.class.getTypeName(), new FunctionsVisitor(this));
+		visitorMapping.put(Date_literalContext.class.getTypeName(), new DateLiteralVisitor(this));
 		// bool expression
 		
 		visitorMapping.put(Bool_expressionContext.class.getTypeName(), new BoolExpressionVisitor(this));
+		visitorMapping.put(Functions_returning_boolsContext.class.getTypeName(), new FunctionsVisitor(this));
 	}
 
 	@Override

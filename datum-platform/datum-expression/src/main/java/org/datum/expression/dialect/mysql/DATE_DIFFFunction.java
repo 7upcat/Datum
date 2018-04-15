@@ -33,8 +33,7 @@ public class DATE_DIFFFunction implements Function {
 
 	@Override
 	public String render(String... arguments) {
-		return String.format("DATE_DIFF ( %s, %s )",
-				new Object[]{arguments[0], arguments[1]});
+		return String.format("TIMESTAMPDIFF ( %s, %s, %s )", new Object[] { arguments[2], arguments[0], arguments[1] });
 	}
 
 }

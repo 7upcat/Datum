@@ -21,33 +21,39 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.datum.expression;
+package org.datum.expression.database;
 
-import org.datum.DatumCoreException;
-import org.junit.Assert;
-import org.junit.Test;
+import java.sql.Driver;
+
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 
 /**
  * @author 7cat
  * @since 1.0
  */
-public class StringExpressionTest {
+public final class MYSQLUtils {
 
-	@Test
-	public void test() {
-		ExpressionUtils.parse("'str1';");
-		ExpressionUtils.parse("'str1' + 'str2';");
-		ExpressionUtils.parse("'str1' + 'str2'+'str3';");
-		ExpressionUtils.parse("LOWER('ABCD');");
-		ExpressionUtils.parse("LOWER('ABCD') + 'abcd';");
-		ExpressionUtils.parse("'str1' + LOWER('ABCD');");
-		ExpressionUtils.parse("'str1'+LOWER([TABLE.FIELD1]);");
+	public static final String TEST_DB_JDBC_URL = "jdbc:h2:mem:MYSQLDB;MODE=MySQL";
+
+	public static final String TEST_DB_JDBC_DRIVER = "org.h2.Driver";
+
+	public static final String TEST_DB_JDBC_USERNAME = "";
+
+	public static final String TEST_DB_JDBC_PASSWPRD = "";
+
+	public static <T>T execute(String expression, Class<T> clazz) {
 		try {
-			ExpressionUtils.parse("'str1'+LOWER([TABLE.FIELD1])+;");
-			Assert.fail("'str1'+LOWER([TABLE.FIELD1])+;");
+			SimpleDriverDataSource dataSource = new SimpleDriverDataSource();
+			dataSource.setDriverClass(Class.forName(TEST_DB_JDBC_DRIVER).asSubclass(Driver.class));
+			dataSource.setUsername(TEST_DB_JDBC_USERNAME);
+			dataSource.setPassword(TEST_DB_JDBC_PASSWPRD);
+			dataSource.setUrl(TEST_DB_JDBC_URL);
+			JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+			return jdbcTemplate.queryForObject(String.format("SELECT %s ", new Object[] { expression }), clazz);
 		}
-		catch (DatumCoreException e) {
+		catch (Exception e) {
+			throw new RuntimeException(e);
 		}
-		ExpressionUtils.parse("[TABLE1.FIELD2]+'abcde';");
 	}
 }

@@ -29,6 +29,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.datum.expression.antlr.DatumExpressionLexer;
 import org.datum.expression.antlr.DatumExpressionParser;
 import org.datum.expression.antlr.ErrorListener;
+import org.datum.expression.dialect.mysql.MYSQLDialect;
 
 /**
  * @author 7cat
@@ -39,7 +40,9 @@ public final class ExpressionUtils {
 	private static CalculationExpressionParser<String> calculationExpressionParser = new SqlCalculationExpressionParser();
 
 	public static String parse(String expression) {
-		return calculationExpressionParser.eval(expression, null);
+		CalculationContext context = new CalculationContext();
+		context.setDialect(new MYSQLDialect());
+		return calculationExpressionParser.eval(expression, context);
 	}
 
 	/**

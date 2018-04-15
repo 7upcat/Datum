@@ -31,7 +31,9 @@ public class STARTSWITHFunction implements Function {
 
 	@Override
 	public String render(String... arguments) {
-		return arguments[0] + " LIKE " + arguments[1].replaceFirst("'", "'%");
+		StringBuilder builder = new StringBuilder(arguments[1]);
+		builder.replace(arguments[1].lastIndexOf("'"), arguments[1].lastIndexOf("'") + 1, "%'");
+		return arguments[0] + " LIKE " + builder.toString();
 	}
 
 }

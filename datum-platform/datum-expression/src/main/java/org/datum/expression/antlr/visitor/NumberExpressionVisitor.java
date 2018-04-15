@@ -44,18 +44,9 @@ public class NumberExpressionVisitor extends BaseParseTreeVisitor {
 	public String visitChildren(RuleNode node) {
 		StringBuffer sb = new StringBuffer();
 		int count = node.getChildCount();
-		if (count == 3) {
-			ParseTree left = node.getChild(0);
-			ParseTree right = node.getChild(2);
-			sb.append(String.format("CONCAT(%s , %s)", new Object[] { accept(left), accept(right) }));
-		}
-		else {
-
-			for (int i = 0; i < count; i++) {
-				ParseTree child = node.getChild(i);
-				sb.append((child instanceof TerminalNode) ? child.getText() : accept(child));
-			}
-
+		for (int i = 0; i < count; i++) {
+			ParseTree child = node.getChild(i);
+			sb.append((child instanceof TerminalNode) ? child.getText() : accept(child));
 		}
 		return sb.toString();
 	}

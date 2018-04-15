@@ -21,33 +21,15 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.datum.expression;
-
-import org.datum.DatumCoreException;
-import org.junit.Assert;
-import org.junit.Test;
+package org.datum.expression.dialect.function;
 
 /**
+ * 日期表达式所支持的时间单位.
+ * 
  * @author 7cat
  * @since 1.0
  */
-public class StringExpressionTest {
+public enum TimeUnit {
 
-	@Test
-	public void test() {
-		ExpressionUtils.parse("'str1';");
-		ExpressionUtils.parse("'str1' + 'str2';");
-		ExpressionUtils.parse("'str1' + 'str2'+'str3';");
-		ExpressionUtils.parse("LOWER('ABCD');");
-		ExpressionUtils.parse("LOWER('ABCD') + 'abcd';");
-		ExpressionUtils.parse("'str1' + LOWER('ABCD');");
-		ExpressionUtils.parse("'str1'+LOWER([TABLE.FIELD1]);");
-		try {
-			ExpressionUtils.parse("'str1'+LOWER([TABLE.FIELD1])+;");
-			Assert.fail("'str1'+LOWER([TABLE.FIELD1])+;");
-		}
-		catch (DatumCoreException e) {
-		}
-		ExpressionUtils.parse("[TABLE1.FIELD2]+'abcde';");
-	}
+	YEAR, QUARTER, MONTH, DAY, WEEK, HOUR, MINUTE, SECOND;
 }

@@ -42,14 +42,20 @@ public class SqlCalculationExpressionParser implements CalculationExpressionPars
 
 	@Override
 	public String eval(String expression, CalculationContext context) {
-		DatumExpressionLexer lexer = new DatumExpressionLexer(CharStreams.fromString(expression));
-		lexer.removeErrorListeners();
-		lexer.addErrorListener(listener);
-		CommonTokenStream tokens = new CommonTokenStream(lexer);
-		DatumExpressionParser parser = new DatumExpressionParser(tokens);
-		parser.removeErrorListeners();
-		parser.addErrorListener(listener);
-		return parser.calculations().accept(new DatumExpressionVisitor());
+		try {
+			CalculationContext.setCurrentContext(context);
+			DatumExpressionLexer lexer = new DatumExpressionLexer(CharStreams.fromString(expression));
+			lexer.removeErrorListeners();
+			lexer.addErrorListener(listener);
+			CommonTokenStream tokens = new CommonTokenStream(lexer);
+			DatumExpressionParser parser = new DatumExpressionParser(tokens);
+			parser.removeErrorListeners();
+			parser.addErrorListener(listener);
+			return parser.calculations().accept(new DatumExpressionVisitor());
+		}
+		finally {
+			CalculationContext.removeCurrentContext();
+		}
 	}
 
 	public void setListener(ErrorListener listener) {

@@ -27,6 +27,8 @@ import org.datum.DatumCoreException;
 import org.junit.Assert;
 import org.junit.Test;
 
+import static org.junit.Assert.*;
+
 /**
  * @author 7cat
  * @since 1.0
@@ -34,7 +36,7 @@ import org.junit.Test;
 public class ArithmeticExpressionTest {
 
 	@Test
-	public void testValidExpression() {
+	public void testSimpleExpression() {
 		ExpressionUtils.parse("2;");
 		ExpressionUtils.parse("-2;");
 		ExpressionUtils.parse("2+5;");
@@ -51,7 +53,8 @@ public class ArithmeticExpressionTest {
 		}
 		ExpressionUtils.parse("ABS(55);");
 		ExpressionUtils.parse("ABS(-55);");
-		ExpressionUtils.parse("ABS(-55)-20;");
+
+		assertEquals("ABS ( - 55 ) - 20", ExpressionUtils.parse("ABS(-55)-20;"));
 		ExpressionUtils.parse("-ABS(-55)-20;");
 		ExpressionUtils.parse("22-ABS(-55);");
 		ExpressionUtils.parse("22-(ABS(-55-20)+25);");
@@ -65,5 +68,26 @@ public class ArithmeticExpressionTest {
 		ExpressionUtils.parse("-ABS([TABLE.FIELD])-[TABLE.FIELD2];");
 
 		ExpressionUtils.parse("[TABLE1.FIELD2]+1234;");
+	}
+
+	@Test
+	public void testLOGFunction() {
+		assertEquals("LOG ( 10, 100 )", ExpressionUtils.parse("LOG(100);"));
+	}
+
+	@Test
+	public void testASCIIFunction() {
+		assertEquals("ASCII ( 'a' )", ExpressionUtils.parse("ASCII('a');"));
+	}
+
+	@Test
+	public void testLENFunction() {
+		assertEquals("LENGTH ( 'abcd' )", ExpressionUtils.parse("LEN('abcd');"));
+	}
+
+	@Test
+	public void testFINDFunction() {
+		assertEquals("LOCATE ( 'a', 'abcd' )", ExpressionUtils.parse("FIND ( 'abcd' , 'a' );"));
+		assertEquals("LOCATE ( 'a', 'abcd', 2 )", ExpressionUtils.parse("FIND ( 'abcd' , 'a', 2 );"));
 	}
 }

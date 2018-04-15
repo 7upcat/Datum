@@ -33,6 +33,20 @@ import org.datum.expression.dialect.Dialect;
  */
 public class CalculationContext {
 
+	private static ThreadLocal<CalculationContext> currentContext = new ThreadLocal<>();
+
+	public static CalculationContext getCurrentContext() {
+		return currentContext.get();
+	}
+
+	public static void setCurrentContext(CalculationContext calculationContext) {
+		currentContext.set(calculationContext);
+	}
+
+	public static void removeCurrentContext() {
+		currentContext.remove();
+	}
+
 	private Dialect dialect;
 
 	public Dialect getDialect() {

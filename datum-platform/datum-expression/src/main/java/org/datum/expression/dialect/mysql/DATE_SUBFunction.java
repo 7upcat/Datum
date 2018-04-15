@@ -26,8 +26,6 @@ package org.datum.expression.dialect.mysql;
 import org.datum.expression.dialect.function.Function;
 
 /**
- * 参考 MYSQL 函数:
- * https://dev.mysql.com/doc/refman/5.7/en/date-and-time-functions.html#function_date-add
  * 
  * @author 7cat
  * @since 1.0
@@ -36,8 +34,8 @@ public class DATE_SUBFunction implements Function {
 
 	@Override
 	public String render(String... arguments) {
-		return String.format("DATE_SUB ( %s, %s, %s )",
-				new Object[]{arguments[0], arguments[1], arguments[2]});
+		return String.format("TIMESTAMPADD ( %s, -%s, %s )",
+				new Object[]{arguments[1], arguments[2], arguments[0]});
 	}
 
 }

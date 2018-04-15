@@ -8,6 +8,7 @@ calculations :
     |comment_expression
 ;
 
+
 arithmetic_expression : 
     <assoc=right> arithmetic_expression '^' arithmetic_expression
     |arithmetic_expression ('*'|'/'|'%') arithmetic_expression
@@ -16,15 +17,15 @@ arithmetic_expression :
 ;
 
 functions_returning_numerics :
-    abs|div
-;
-
-abs :
-    'ABS' '(' arithmetic_expression ')'
-;
-
-div :
-    'DIV' '(' arithmetic_expression ',' arithmetic_expression ')'
+   'PI' '(' ')'
+   |('ABS'|'ACOS'|'ASIN'|'ATAN'|'CEILING'|'COS'|'COT'|'DEGREES'|'EXP'|'FLOOR'|'LN'|'RADIANS'|'SIGN'|'SIN'|'SQRT'|'TAN') '(' arithmetic_expression ')'
+   |('ATAN2'|'DIV'|'POWER') '(' arithmetic_expression ',' arithmetic_expression ')'
+   |('ROUND'|'LOG') '(' arithmetic_expression (',' arithmetic_expression)? ')'
+   |('ASCII'|'LEN') '(' string_expression ')'
+   |'FIND' '(' string_expression ',' string_expression (',' arithmetic_expression)? ')'
+   |'DATE_PART' '(' (date_expression|field) ',' ('YEAR'|'QUARTER'|'MONTH'|'DAY'|'WEEK'|'HOUR'|'MINUTE'|'SECOND')  ')'
+   |('DAY'|'MONTH'|'YEAR') '(' (date_expression|field) ')'
+   |'DATE_DIFF' '(' (date_expression|field) ',' (date_expression|field) ',' ('YEAR'|'QUARTER'|'MONTH'|'DAY'|'WEEK'|'HOUR'|'MINUTE'|'SECOND') ')'
 ;
 
 numeric_literal : NUMBER;
@@ -38,17 +39,24 @@ string_expression :
 ;
 
 functions_returning_strings :
-    lower
+    ('CHAR'|'SPACE')   '(' arithmetic_expression ')'
+    |('LOWER'|'LTRIM'|'RTRIM'|'TRIM'|'UPPER')   '(' string_expression ')'
+    |'MID' '(' string_expression ',' arithmetic_expression (',' arithmetic_expression)? ')'
+    |('LEFT'|'RIGHT') '(' string_expression ',' arithmetic_expression ')'
+    |'REPLACE' '(' string_expression ',' string_expression  ',' string_expression ')'
 ;
-
-lower : 'LOWER' '(' string_expression ')';
 
 string_literal : STRING;
 
 date_expression :
-    date_expression ( '+'|'-' ) arithmetic_expression
-    | date_expression ( '+'|'-' ) field
-    | date_literal
+    date_literal
+    |functions_returning_dates
+;
+
+functions_returning_dates:
+  ('DATE_ADD'|'DATE_SUB')  '(' (date_expression|field) ',' ('YEAR'|'QUARTER'|'MONTH'|'DAY'|'WEEK'|'HOUR'|'MINUTE'|'SECOND')  ',' arithmetic_expression ')'
+  |'NOW' '(' ')'
+  |'TODAY' '(' ')'
 ;
 
 date_literal : '#' DATE '#' ;
@@ -60,6 +68,11 @@ bool_expression :
     | field ( COMPARISON_OPERATOR ) ( arithmetic_expression|string_expression|date_expression|native_expression )
     | bool_expression ( 'AND'|'OR' ) bool_expression
     | '(' bool_expression ')'
+    | functions_returning_bools
+;
+
+functions_returning_bools:
+    ('CONTAINS'|'ENDSWITH'|'STARTSWITH') '(' string_expression ',' string_expression ')'
 ;
 
 native_expression: 'NATIVE' '(' string_expression (','(arithmetic_expression|string_expression|date_expression))* ')';

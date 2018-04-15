@@ -21,33 +21,26 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.datum.expression;
+package org.datum.expression.antlr.visitor;
 
-import org.datum.DatumCoreException;
-import org.junit.Assert;
-import org.junit.Test;
+import org.antlr.v4.runtime.tree.RuleNode;
+import org.datum.expression.antlr.VisitorResolver;
 
 /**
+ * 日期字面量节点的解析树访问者实现.
+ * 
  * @author 7cat
  * @since 1.0
  */
-public class StringExpressionTest {
+public class DateLiteralVisitor extends BaseParseTreeVisitor {
 
-	@Test
-	public void test() {
-		ExpressionUtils.parse("'str1';");
-		ExpressionUtils.parse("'str1' + 'str2';");
-		ExpressionUtils.parse("'str1' + 'str2'+'str3';");
-		ExpressionUtils.parse("LOWER('ABCD');");
-		ExpressionUtils.parse("LOWER('ABCD') + 'abcd';");
-		ExpressionUtils.parse("'str1' + LOWER('ABCD');");
-		ExpressionUtils.parse("'str1'+LOWER([TABLE.FIELD1]);");
-		try {
-			ExpressionUtils.parse("'str1'+LOWER([TABLE.FIELD1])+;");
-			Assert.fail("'str1'+LOWER([TABLE.FIELD1])+;");
-		}
-		catch (DatumCoreException e) {
-		}
-		ExpressionUtils.parse("[TABLE1.FIELD2]+'abcde';");
+	public DateLiteralVisitor(VisitorResolver visitorResolver) {
+		super(visitorResolver);
 	}
+
+	@Override
+	public String visitChildren(RuleNode node) {
+		return "'" + node.getChild(1).getText() + "'";
+	}
+
 }

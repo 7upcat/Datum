@@ -28,6 +28,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 import org.antlr.v4.runtime.tree.RuleNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
+import org.datum.expression.CalculationContext;
 import org.datum.expression.antlr.VisitorResolver;
 
 /**
@@ -51,6 +52,10 @@ public class BaseParseTreeVisitor implements ParseTreeVisitor<String> {
 		else {
 			return parseTree.accept(visitorResolver.resolve(parseTree));
 		}
+	}
+
+	protected CalculationContext getCalculationContext() {
+		return CalculationContext.getCurrentContext();
 	}
 
 	@Override

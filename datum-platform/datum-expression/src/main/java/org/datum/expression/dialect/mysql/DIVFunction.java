@@ -21,33 +21,19 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.datum.expression;
+package org.datum.expression.dialect.mysql;
 
-import org.datum.DatumCoreException;
-import org.junit.Assert;
-import org.junit.Test;
+import org.datum.expression.dialect.function.Function;
 
 /**
  * @author 7cat
  * @since 1.0
  */
-public class StringExpressionTest {
+public class DIVFunction implements Function {
 
-	@Test
-	public void test() {
-		ExpressionUtils.parse("'str1';");
-		ExpressionUtils.parse("'str1' + 'str2';");
-		ExpressionUtils.parse("'str1' + 'str2'+'str3';");
-		ExpressionUtils.parse("LOWER('ABCD');");
-		ExpressionUtils.parse("LOWER('ABCD') + 'abcd';");
-		ExpressionUtils.parse("'str1' + LOWER('ABCD');");
-		ExpressionUtils.parse("'str1'+LOWER([TABLE.FIELD1]);");
-		try {
-			ExpressionUtils.parse("'str1'+LOWER([TABLE.FIELD1])+;");
-			Assert.fail("'str1'+LOWER([TABLE.FIELD1])+;");
-		}
-		catch (DatumCoreException e) {
-		}
-		ExpressionUtils.parse("[TABLE1.FIELD2]+'abcde';");
+	@Override
+	public String render(String... arguments) {
+		return String.format(" %s / %s ", new Object[] { arguments[0], arguments[1] });
 	}
+
 }

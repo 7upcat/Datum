@@ -33,7 +33,4 @@ public final class ErrorCodes {
 
 	/** 表达式语法错误. */
 	public static final String EXPRESSION_SYNTAX_ERROR = "EREL0101";
-	
-	/** 表达式存在歧义. */
-	public static final String EXPRESSION_AMBIGUITY_ERROR = "EREL0102";
 }

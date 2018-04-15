@@ -40,6 +40,6 @@ public class DateExpressionVisitor extends BaseParseTreeVisitor {
 
 	@Override
 	public String visitChildren(RuleNode node) {
-		return "'" + node.getChild(0).getChild(1).getText() + "'";
+		return accept(node.getChild(0));
 	}
 }

@@ -45,17 +45,16 @@ public class FunctionsVisitor extends BaseParseTreeVisitor {
 	@Override
 	public String visitChildren(RuleNode node) {
 		// child 为具体的函数
-		ParseTree func = node.getChild(0);
-		int count = func.getChildCount();
-		String functionName = func.getChild(0).getText();
+		int count = node.getChildCount();
+		String functionName = node.getChild(0).getText();
 		List<String> params = new ArrayList<>();
 
 		// 函数名 (参数1,参数2,参数n);
 		for (int i = 2; count > 3 && i < count; i += 2) {
-			ParseTree paramNode = func.getChild(i);
+			ParseTree paramNode = node.getChild(i);
 			params.add(accept(paramNode));
 		}
-
-		return functionName + "(" + String.join(",", params) + ")";
+		
+		return getCalculationContext().getDialect().renderFunction(functionName, params.toArray(new String[0]));
 	}
 }

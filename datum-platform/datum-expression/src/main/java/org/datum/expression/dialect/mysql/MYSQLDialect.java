@@ -34,7 +34,7 @@ import org.datum.expression.dialect.function.STARTSWITHFunction;
 import org.datum.expression.dialect.function.StandardFunction;
 
 /**
- * MYSQL 数据库的方言.
+ * MYSQL 数据库的方言，将 datum-expression 内置函数转义成 MYSQL 数据库的函数.
  * 
  * @author 7cat
  * @since 1.0
@@ -55,11 +55,11 @@ public class MYSQLDialect implements Dialect {
 		functionMapping.put("COS", new StandardFunction("COS"));
 		functionMapping.put("COT", new StandardFunction("COT"));
 		functionMapping.put("DEGREES", new StandardFunction("DEGREES"));
-		functionMapping.put("DIV", new StandardFunction("DIV"));
+		functionMapping.put("DIV", new DIVFunction());
 		functionMapping.put("EXP", new StandardFunction("EXP"));
 		functionMapping.put("FLOOR", new StandardFunction("FLOOR"));
 		functionMapping.put("LN", new StandardFunction("LN"));
-		functionMapping.put("LOG", new StandardFunction("LOG"));
+		functionMapping.put("LOG", new LOGFunction());
 		functionMapping.put("PI", new StandardFunction("PI"));
 		functionMapping.put("POWER", new StandardFunction("POWER"));
 		functionMapping.put("RADIANS", new StandardFunction("RADIANS"));
@@ -71,7 +71,7 @@ public class MYSQLDialect implements Dialect {
 		// 字符函数
 		// 暂不支持 SPLIT、MAX、MIN
 		functionMapping.put("ASCII", new StandardFunction("ASCII"));
-		functionMapping.put("CHAR", new StandardFunction("CHAR"));
+		functionMapping.put("CHAR", new StandardFunction("CHAR")); 
 		functionMapping.put("CONTAINS", new CONTAINSFunction());
 		functionMapping.put("ENDSWITH", new ENDSWITHFunction());
 		// FIND/FINDNTH 使用同一个函数只是参数不同
@@ -80,9 +80,7 @@ public class MYSQLDialect implements Dialect {
 		functionMapping.put("LEN", new StandardFunction("LENGTH"));
 		functionMapping.put("LOWER", new StandardFunction("LOWER"));
 		functionMapping.put("LTRIM", new StandardFunction("LTRIM"));
-		// functionMapping.put("MAX", new StandardFunction(""));
-		// functionMapping.put("MIN", new StandardFunction(""));
-		functionMapping.put("MID", new StandardFunction("MID"));
+		functionMapping.put("MID", new StandardFunction("SUBSTRING"));
 		functionMapping.put("REPLACE", new StandardFunction("REPLACE"));
 		functionMapping.put("RIGHT", new StandardFunction("RIGHT"));
 		functionMapping.put("RTRIM", new StandardFunction("RTRIM"));
@@ -95,7 +93,8 @@ public class MYSQLDialect implements Dialect {
 		functionMapping.put("DATE_ADD", new DATE_ADDFunction());
 		functionMapping.put("DATE_SUB", new DATE_SUBFunction());
 		functionMapping.put("DATE_PART", new DATEPARTFunction());
-		functionMapping.put("DAYOFMONTH", new StandardFunction("DAYOFMONTH"));
+		functionMapping.put("DATE_DIFF", new DATE_DIFFFunction());
+		functionMapping.put("DAY", new StandardFunction("DAYOFMONTH"));
 		functionMapping.put("MONTH", new StandardFunction("MONTH"));
 		functionMapping.put("NOW", new StandardFunction("NOW"));
 		functionMapping.put("TODAY", new StandardFunction("CURDATE"));
