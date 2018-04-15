@@ -45,6 +45,7 @@ import org.datum.expression.antlr.DatumExpressionParser.Numeric_literalContext;
 import org.datum.expression.antlr.DatumExpressionParser.String_expressionContext;
 import org.datum.expression.antlr.DatumExpressionParser.String_literalContext;
 import org.datum.expression.antlr.VisitorResolver;
+import org.datum.expression.common.ErrorCodes;
 
 /**
  * 表达式的顶层访问者,同时也是一个 {@link VisitorResolver} 根据当前的上下文件获取适合的解析观察者进行处理.
@@ -101,16 +102,16 @@ public class DatumExpressionVisitor implements VisitorResolver, ParseTreeVisitor
 
 	@Override
 	public String visit(ParseTree tree) {
-		throw new UnsupportedOperationException("不支持此操作.");
+		throw new UnsupportedOperationException(ErrorCodes.EXPRESSION_PARSE_ERROR);
 	}
 
 	@Override
 	public String visitTerminal(TerminalNode node) {
-		throw new UnsupportedOperationException("不支持此操作.");
+		throw new UnsupportedOperationException(ErrorCodes.EXPRESSION_PARSE_ERROR);
 	}
 
 	@Override
 	public String visitErrorNode(ErrorNode node) {
-		throw new UnsupportedOperationException("不支持此操作.");
+		throw new UnsupportedOperationException(ErrorCodes.EXPRESSION_PARSE_ERROR);
 	}
 }

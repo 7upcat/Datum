@@ -44,7 +44,7 @@ public class STARTSWITHFunctionTest {
 	public void testRender() {
 		STARTSWITHFunction startswithFunction = new STARTSWITHFunction();
 
-		assertEquals("TABLE.FIELD1 LIKE '%ABCD'", startswithFunction.render("TABLE.FIELD1", "'ABCD'"));
+		assertEquals("TABLE.FIELD1 LIKE 'ABCD%'", startswithFunction.render("TABLE.FIELD1", "'ABCD'"));
 	}
 
 }

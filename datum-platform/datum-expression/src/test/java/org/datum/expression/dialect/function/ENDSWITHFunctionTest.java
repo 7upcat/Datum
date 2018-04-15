@@ -39,8 +39,7 @@ public class ENDSWITHFunctionTest {
 	@Test
 	public void testRender() {
 		ENDSWITHFunction endsWithFunction = new ENDSWITHFunction();
-
-		assertEquals("TABLE.FIELD1 LIKE 'ABCD%'", endsWithFunction.render("TABLE.FIELD1", "'ABCD'"));
+		assertEquals("TABLE.FIELD1 LIKE '%ABCD'", endsWithFunction.render("TABLE.FIELD1", "'ABCD'"));
 	}
 
 }

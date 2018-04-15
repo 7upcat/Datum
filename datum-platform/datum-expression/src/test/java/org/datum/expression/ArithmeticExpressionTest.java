@@ -72,7 +72,7 @@ public class ArithmeticExpressionTest {
 
 	@Test
 	public void testLOGFunction() {
-		assertEquals("LOG ( 10, 100 )", ExpressionUtils.parse("LOG(100);"));
+		assertEquals("LOG ( 100 )", ExpressionUtils.parse("LOG(100);"));
 	}
 
 	@Test
