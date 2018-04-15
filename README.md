@@ -1,4 +1,4 @@
-# Datum
+# Datum &middot; [![Build Status](https://travis-ci.org/CodingToy/Datum.svg?branch=master)](https://travis-ci.org/CodingToy/Datum)
 
 Datum 是一个开箱即用的可视化自助数据分析平台，帮助人们使用及理解数据.
 
