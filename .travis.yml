@@ -1,3 +1,4 @@
+before_install: cd datum-platform
 language: java
 jdk:
   - oraclejdk8
