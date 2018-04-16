@@ -34,6 +34,7 @@ import org.datum.application.olap.domain.Connector;
 import org.datum.application.olap.domain.Field;
 import org.datum.application.olap.domain.PhysicalTable;
 import org.datum.application.test.BaseTest;
+import org.datum.expression.dialect.h2.H2Dialect;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -46,7 +47,7 @@ public class JdbcOlapServiceTest extends BaseTest {
 
 	@Test
 	public void testResolveTables() {
-		OlapService<PhysicalTable> resolver = new JdbcOlapService();
+		OlapService<PhysicalTable, Field> resolver = new JdbcOlapService();
 		List<PhysicalTable> tables = resolver.resolveTables(ConnectorFactory.newSampleDBConnector());
 		assertEquals(3, tables.size());
 	}
@@ -60,5 +61,12 @@ public class JdbcOlapServiceTest extends BaseTest {
 		Field cusIdColumn = resolver.resolveFields(connector, table).stream().filter(
 				c -> TestConstants.FIELD_CUS_ID.equals(c.getColumnName())).findAny().get();
 		assertEquals(Types.CHAR, cusIdColumn.getDataType());
+	}
+
+	@Test
+	public void testResolveDialect() {
+		JdbcOlapService resolver = new JdbcOlapService();
+		Connector connector = ConnectorFactory.newSampleDBConnector();
+		assertTrue(resolver.resolveDialect(connector) instanceof H2Dialect);
 	}
 }

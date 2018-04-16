@@ -32,23 +32,48 @@ import org.springframework.jdbc.datasource.SimpleDriverDataSource;
  * @author 7cat
  * @since 1.0
  */
-public final class MYSQLUtils {
+public final class DBUtils {
 
-	public static final String TEST_DB_JDBC_URL = "jdbc:h2:mem:MYSQLDB;MODE=MySQL";
+	public static final String MYSQL_JDBC_URL = "jdbc:h2:mem:MYSQLDB;MODE=MySQL";
 
-	public static final String TEST_DB_JDBC_DRIVER = "org.h2.Driver";
+	public static final String MYSQL_JDBC_DRIVER = "org.h2.Driver";
 
-	public static final String TEST_DB_JDBC_USERNAME = "";
+	public static final String MYSQL_JDBC_USERNAME = "";
 
-	public static final String TEST_DB_JDBC_PASSWPRD = "";
+	public static final String MYSQL_JDBC_PASSWPRD = "";
+	
+	
+	public static final String H2_JDBC_URL = "jdbc:h2:mem:H2DB";
 
-	public static <T>T execute(String expression, Class<T> clazz) {
+	public static final String H2_JDBC_DRIVER = "org.h2.Driver";
+
+	public static final String H2_JDBC_USERNAME = "";
+
+	public static final String H2_JDBC_PASSWPRD = "";
+
+	public static <T>T executeOnMYSQL(String expression, Class<T> clazz) {
 		try {
 			SimpleDriverDataSource dataSource = new SimpleDriverDataSource();
-			dataSource.setDriverClass(Class.forName(TEST_DB_JDBC_DRIVER).asSubclass(Driver.class));
-			dataSource.setUsername(TEST_DB_JDBC_USERNAME);
-			dataSource.setPassword(TEST_DB_JDBC_PASSWPRD);
-			dataSource.setUrl(TEST_DB_JDBC_URL);
+			dataSource.setDriverClass(Class.forName(MYSQL_JDBC_DRIVER).asSubclass(Driver.class));
+			dataSource.setUsername(MYSQL_JDBC_USERNAME);
+			dataSource.setPassword(MYSQL_JDBC_PASSWPRD);
+			dataSource.setUrl(MYSQL_JDBC_URL);
+			JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+			return jdbcTemplate.queryForObject(String.format("SELECT %s ", new Object[] { expression }), clazz);
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	
+	public static <T>T executeOnH2(String expression, Class<T> clazz) {
+		try {
+			SimpleDriverDataSource dataSource = new SimpleDriverDataSource();
+			dataSource.setDriverClass(Class.forName(H2_JDBC_DRIVER).asSubclass(Driver.class));
+			dataSource.setUsername(H2_JDBC_USERNAME);
+			dataSource.setPassword(H2_JDBC_PASSWPRD);
+			dataSource.setUrl(H2_JDBC_URL);
 			JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 			return jdbcTemplate.queryForObject(String.format("SELECT %s ", new Object[] { expression }), clazz);
 		}

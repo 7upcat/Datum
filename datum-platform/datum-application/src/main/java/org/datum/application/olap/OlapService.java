@@ -26,8 +26,9 @@ package org.datum.application.olap;
 import java.util.List;
 
 import org.datum.application.olap.domain.Connector;
-import org.datum.application.olap.domain.Field;
+import org.datum.application.olap.domain.FieldLike;
 import org.datum.application.olap.domain.TableLike;
+import org.datum.expression.dialect.Dialect;
 
 /**
  * 数据源元数据解析器.
@@ -35,8 +36,7 @@ import org.datum.application.olap.domain.TableLike;
  * @author 7cat
  * @since 1.0
  */
-public interface OlapService<T extends TableLike> {
-	
+public interface OlapService<T extends TableLike, F extends FieldLike> {
 
 	/**
 	 * 根据指定的 {@link Connector} 解析此连接包含的 {@link TableLike}列表 .
@@ -62,6 +62,14 @@ public interface OlapService<T extends TableLike> {
 	 * @param table 指定连接器下的表
 	 * @return 指定 table 下的栏位列表
 	 */
-	List<Field> resolveFields(Connector connector, T table);
-	
+	List<F> resolveFields(Connector connector, T table);
+
+	/**
+	 * 根据指定的 {@link Connector} 获取适合的 {@link Dialect}.
+	 * 
+	 * @param connector 连接器
+	 * @return 指定连接器适合的方言
+	 */
+	Dialect resolveDialect(Connector connector);
+
 }

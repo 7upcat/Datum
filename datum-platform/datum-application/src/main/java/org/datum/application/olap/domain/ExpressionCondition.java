@@ -23,17 +23,34 @@
 
 package org.datum.application.olap.domain;
 
+import org.datum.expression.CalculationContext;
+import org.datum.expression.CalculationExpressionParser;
+import org.datum.expression.SqlCalculationExpressionParser;
+import org.datum.expression.dialect.Dialect;
 import org.jooq.impl.DSL;
 
 /**
+ * 支持 datum-expression 的条件.
+ * 
  * @author 7cat
  */
-public class SqlCondition implements Condition {
+public class ExpressionCondition implements Condition {
 
-	private String sqlPart;
+	private CalculationExpressionParser<String> calculationExpressionParser = new SqlCalculationExpressionParser();
+
+	private String expression;
+
+	private Dialect dialect;
+
+	public ExpressionCondition(String expression, Dialect dialect) {
+		this.expression = expression;
+		this.dialect = dialect;
+	}
 
 	@Override
 	public org.jooq.Condition asCondition() {
-		return DSL.condition(sqlPart);
+		CalculationContext context = new CalculationContext();
+		context.setDialect(this.dialect);
+		return DSL.condition(calculationExpressionParser.eval(expression, context));
 	}
 }

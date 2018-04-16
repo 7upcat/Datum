@@ -23,29 +23,29 @@
 
 package org.datum.application.olap.datasource.sql.support;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-
-import static org.junit.Assert.*;
-
 import org.datum.application.common.TestConstants;
 import org.datum.application.factory.ConnectorFactory;
 import org.datum.application.olap.OlapService;
 import org.datum.application.olap.datasource.sql.SqlTranslator;
-import org.datum.application.olap.datasource.sql.support.JdbcOlapService;
 import org.datum.application.olap.domain.CompareCondition;
+import org.datum.application.olap.domain.Condition;
 import org.datum.application.olap.domain.Connector;
 import org.datum.application.olap.domain.ConnectorRepository;
 import org.datum.application.olap.domain.Cube;
 import org.datum.application.olap.domain.Dimension;
+import org.datum.application.olap.domain.ExpressionCondition;
 import org.datum.application.olap.domain.Field;
 import org.datum.application.olap.domain.JoinExpression;
 import org.datum.application.olap.domain.PhysicalTable;
 import org.datum.application.olap.domain.TableLike;
 import org.datum.application.test.BaseTest;
 import org.datum.application.util.DBUtils;
+import org.junit.Before;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+
+import static org.junit.Assert.*;
 
 /**
  * @author 7cat
@@ -59,7 +59,7 @@ public class JooqSqlTranslatorTest extends BaseTest {
 	@Autowired
 	private SqlTranslator sqlTranslator;
 
-	private OlapService<PhysicalTable> metadataResolver = new JdbcOlapService();
+	private OlapService<PhysicalTable, Field> metadataResolver = new JdbcOlapService();
 
 	private JdbcTemplate jdbcTemplate;
 
@@ -70,16 +70,19 @@ public class JooqSqlTranslatorTest extends BaseTest {
 	private TableLike custBasicInfo;
 
 	private Cube cube;
+	
+	private Connector connector;
 
 	@Before
 	public void init() {
-		Connector connector = ConnectorFactory.newSampleDBConnector();
+		connector = ConnectorFactory.newSampleDBConnector();
 		connectorRepository.save(connector);
 		jdbcTemplate = new JdbcTemplate(DBUtils.newDataSource(connector));
-		bankVoucher = metadataResolver.resolveTable(connector, PhysicalTable.newTable(TestConstants.TABLE_BANK_VOUCHER));
+		bankVoucher = metadataResolver.resolveTable(connector,
+				PhysicalTable.newTable(TestConstants.TABLE_BANK_VOUCHER));
 		account = metadataResolver.resolveTable(connector, PhysicalTable.newTable(TestConstants.TABLE_ACCOUNT));
 		custBasicInfo = metadataResolver.resolveTable(connector,
-					PhysicalTable.newTable(TestConstants.TABLE_CUST_BASIC_INFO));
+				PhysicalTable.newTable(TestConstants.TABLE_CUST_BASIC_INFO));
 		cube = new Cube("demoCube", bankVoucher);
 	}
 
@@ -133,8 +136,8 @@ public class JooqSqlTranslatorTest extends BaseTest {
 	@Test
 	public void testInnerJoinAccountWithJoinExpression() {
 		Field rightAccountNo = account.filterByName(TestConstants.FIELD_ACCOUNT_NO);
-		cube.addDimension(Dimension.JOIN_TYPE_INNER, account,
-				new CompareCondition(new JoinExpression(bankVoucher, "concat(BANK_VOUCHER.ACCOUNT_NO,'1')"), rightAccountNo));
+		cube.addDimension(Dimension.JOIN_TYPE_INNER, account, new CompareCondition(
+				new JoinExpression(bankVoucher, "concat(BANK_VOUCHER.ACCOUNT_NO,'1')"), rightAccountNo));
 		assertEquals(0, jdbcTemplate.queryForList(sqlTranslator.translate(cube)).size());
 	}
 
@@ -149,7 +152,11 @@ public class JooqSqlTranslatorTest extends BaseTest {
 		cube.addDimension(Dimension.JOIN_TYPE_LEFT, account, new CompareCondition(leftAccountNo, rightAccountNo));
 		Field leftCusId = account.filterByName(TestConstants.FIELD_CUS_ID);
 		Field rightCusId = custBasicInfo.filterByName(TestConstants.FIELD_CUS_ID);
-		cube.addDimension(Dimension.JOIN_TYPE_LEFT, custBasicInfo, new CompareCondition(leftCusId, rightCusId));
+		
+		Condition condition = new ExpressionCondition(String.format("([%s] = [%s] AND 2=2);", new Object[] {
+			leftCusId.asField(), rightCusId.asField() }), metadataResolver.resolveDialect(connector));
+		
+		cube.addDimension(Dimension.JOIN_TYPE_LEFT, custBasicInfo, condition);
 		assertEquals(2, jdbcTemplate.queryForList(sqlTranslator.translate(cube)).size());
 	}
 

@@ -33,7 +33,11 @@ public final class ErrorCodes {
 
 	/** 表达式语法错误. */
 	public static final String EXPRESSION_SYNTAX_ERROR = "EREL0101";
-	
+
 	/** 表达式解析运行时异常. */
 	public static final String EXPRESSION_PARSE_ERROR = "EREL0102";
+
+	/** 解析获取方言异常. */
+	public static final String RESOLVE_DIALECT_ERROR = "EREL0103";
+
 }

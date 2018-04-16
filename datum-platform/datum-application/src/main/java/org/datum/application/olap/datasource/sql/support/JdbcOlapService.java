@@ -35,6 +35,10 @@ import org.datum.application.olap.domain.Connector;
 import org.datum.application.olap.domain.Field;
 import org.datum.application.olap.domain.PhysicalTable;
 import org.datum.application.util.DBUtils;
+import org.datum.expression.dialect.Database;
+import org.datum.expression.dialect.Dialect;
+import org.datum.expression.dialect.DialectResolutionInfo;
+import org.datum.expression.dialect.MetaDataDialectResolutionInfo;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapperResultSetExtractor;
 import org.springframework.jdbc.support.DatabaseMetaDataCallback;
@@ -47,7 +51,7 @@ import org.springframework.jdbc.support.MetaDataAccessException;
  * @author 7cat
  * @since 1.0
  */
-public class JdbcOlapService implements OlapService<PhysicalTable> {
+public class JdbcOlapService implements OlapService<PhysicalTable, Field> {
 
 	private static final String COLUMN_NAME_PATTERN_ANY = "%";
 
@@ -103,5 +107,19 @@ public class JdbcOlapService implements OlapService<PhysicalTable> {
 		catch (MetaDataAccessException e) {
 			throw new DatumCoreException(ErrorCodes.EXTRACT_TABLE_METADATA_ERROR, e);
 		}
+	}
+
+	@Override
+	public Dialect resolveDialect(Connector connector) {
+		return extractDatabaseMetaData(connector, (dbmd) -> {
+			DialectResolutionInfo info = new MetaDataDialectResolutionInfo(dbmd);
+			for (Database database : Database.values()) {
+				Dialect dialect = database.resolveDialect(info);
+				if (dialect != null) {
+					return dialect;
+				}
+			}
+			return null;
+		});
 	}
 }

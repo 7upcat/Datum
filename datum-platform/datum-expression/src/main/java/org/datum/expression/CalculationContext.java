@@ -34,7 +34,7 @@ import org.datum.expression.dialect.Dialect;
 public class CalculationContext {
 
 	private static ThreadLocal<CalculationContext> currentContext = new ThreadLocal<>();
-
+	
 	public static CalculationContext getCurrentContext() {
 		return currentContext.get();
 	}

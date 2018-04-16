@@ -27,10 +27,11 @@ import org.jooq.impl.JooqUtils;
 
 /**
  * 使用数据域比较的关联条件.
+ * 
  * @author 7cat
  * @since 1.0
  */
-public class CompareCondition implements Condition{
+public class CompareCondition implements Condition {
 
 	public static final String COMPARATOR_EQUALS = "EQUALS";
 
@@ -61,7 +62,7 @@ public class CompareCondition implements Condition{
 	public org.jooq.Condition asCondition() {
 		return JooqUtils.newCompareCondition(getLeft().asField(), getRight().asField(), getComparator());
 	}
-	
+
 	private FieldLike left;
 
 	private FieldLike right;

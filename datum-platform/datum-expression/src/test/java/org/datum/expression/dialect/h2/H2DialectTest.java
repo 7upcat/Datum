@@ -21,7 +21,7 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.datum.expression.dialect.mysql;
+package org.datum.expression.dialect.h2;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -43,7 +43,7 @@ import static org.junit.Assert.*;
  * @author 7cat
  * @since 1.0
  */
-public class MYSQLDialectTest {
+public class H2DialectTest {
 
 	private CalculationExpressionParser<String> parser = new SqlCalculationExpressionParser();
 
@@ -147,7 +147,7 @@ public class MYSQLDialectTest {
 
 	private <T> T eval(String expression, Class<T> clazz) {
 		CalculationContext context = new CalculationContext();
-		context.setDialect(new MYSQLDialect());
-		return DBUtils.executeOnMYSQL(parser.eval(expression, context), clazz);
+		context.setDialect(new H2Dialect());
+		return DBUtils.executeOnH2(parser.eval(expression, context), clazz);
 	}
 }

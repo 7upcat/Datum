@@ -26,6 +26,8 @@ package org.datum.application;
 import javax.sql.DataSource;
 
 import org.apache.tomcat.jdbc.pool.PoolProperties;
+import org.datum.expression.CalculationExpressionParser;
+import org.datum.expression.SqlCalculationExpressionParser;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -38,6 +40,11 @@ public class Application implements WebMvcConfigurer {
 	@Bean
 	public DataSource dataSource() {
 		return new org.apache.tomcat.jdbc.pool.DataSource(poolProperties());
+	}
+
+	@Bean
+	public CalculationExpressionParser<String> expressionParser() {
+		return new SqlCalculationExpressionParser();
 	}
 
 	@Bean

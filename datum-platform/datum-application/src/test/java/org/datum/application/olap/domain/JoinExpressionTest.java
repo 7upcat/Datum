@@ -50,7 +50,7 @@ public class JoinExpressionTest extends BaseTest {
 	@Autowired
 	private ConnectorRepository connectorRepository;
 
-	private OlapService<PhysicalTable> metadataResolver = new JdbcOlapService();
+	private OlapService<PhysicalTable,Field> metadataResolver = new JdbcOlapService();
 
 	private JdbcTemplate jdbcTemplate;
 
