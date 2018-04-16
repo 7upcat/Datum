@@ -11,7 +11,7 @@
 	<dependencies>
 	   <dependency>
 			<groupId>org.datum</groupId>
-			<artifactId>datum-core</artifactId>
+			<artifactId>datum-expression</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

@@ -23,6 +23,10 @@
 
 package org.datum.application.olap.datasource.sql.support;
 
+import static org.jooq.impl.DSL.field;
+import static org.jooq.impl.DSL.table;
+import static org.jooq.impl.DSL.using;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -37,10 +41,7 @@ import org.jooq.JoinType;
 import org.jooq.Record;
 import org.jooq.SelectJoinStep;
 import org.jooq.SelectOnStep;
-import org.jooq.impl.JooqUtils;
 import org.springframework.stereotype.Component;
-
-import static org.jooq.impl.DSL.*;
 
 /**
  * 基于 Jooq 实现的 SQL 解释器,仅使用了 Jooq 的 SQL Builder 功能基于 Apache 2.0 协议即可不需要商用授权.
@@ -75,7 +76,7 @@ public class JooqSqlTranslator implements SqlTranslator {
 			SelectOnStep<Record> joinStep = fact.join(table(d.getTarget().getTableName()),
 					joinTypesMapping.get(d.getType()));
 			Arrays.stream(d.getConditions()).forEach((c) -> {
-				joinStep.on(JooqUtils.newCompareCondition(c.getLeft().asField(), c.getRight().asField(), c.getComparator()));
+				joinStep.on(c.asCondition());
 			});
 		});
 

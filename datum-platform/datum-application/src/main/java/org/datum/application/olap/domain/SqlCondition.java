@@ -21,27 +21,19 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.jooq.impl;
+package org.datum.application.olap.domain;
 
-import static org.jooq.impl.DSL.nullSafe;
-
-import org.jooq.Comparator;
-import org.jooq.Condition;
-import org.jooq.Field;
+import org.jooq.impl.DSL;
 
 /**
- * 由于 Jooq {@link CompareCondition} 的访问的权限是包级别,通过此种 hack 方式 访问,后续优化是否有其他方式可以避免此种问题.
- * 
  * @author 7cat
- * @since 1.0
  */
-public final class JooqUtils {
+public class SqlCondition implements Condition {
 
-	public static final Condition newCompareCondition(Field<?> left, Field<?> right, String comparator) {
-		return new CompareCondition(left, nullSafe(right, left.getDataType()), Comparator.valueOf(comparator));
-	}
-	
-	public static final Condition falseCondition() {
-		return FalseCondition.INSTANCE;
+	private String sqlPart;
+
+	@Override
+	public org.jooq.Condition asCondition() {
+		return DSL.condition(sqlPart);
 	}
 }

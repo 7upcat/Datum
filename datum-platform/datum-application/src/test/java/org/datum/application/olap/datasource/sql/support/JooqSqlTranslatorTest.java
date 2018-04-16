@@ -35,7 +35,7 @@ import org.datum.application.factory.ConnectorFactory;
 import org.datum.application.olap.OlapService;
 import org.datum.application.olap.datasource.sql.SqlTranslator;
 import org.datum.application.olap.datasource.sql.support.JdbcOlapService;
-import org.datum.application.olap.domain.Condition;
+import org.datum.application.olap.domain.CompareCondition;
 import org.datum.application.olap.domain.Connector;
 import org.datum.application.olap.domain.ConnectorRepository;
 import org.datum.application.olap.domain.Cube;
@@ -98,20 +98,20 @@ public class JooqSqlTranslatorTest extends BaseTest {
 	public void testLeftJoinAccount() {
 		Field leftAccountNo = bankVoucher.filterByName(TestConstants.FIELD_ACCOUNT_NO);
 		Field rightAccountNo = account.filterByName(TestConstants.FIELD_ACCOUNT_NO);
-		cube.addDimension(Dimension.JOIN_TYPE_LEFT, account, new Condition(leftAccountNo, rightAccountNo));
+		cube.addDimension(Dimension.JOIN_TYPE_LEFT, account, new CompareCondition(leftAccountNo, rightAccountNo));
 		assertEquals(2, jdbcTemplate.queryForList(sqlTranslator.translate(cube)).size());
 	}
 
 	/**
 	 * 测试 {@link TestConstants#TABLE_BANK_VOUCHER} 表同 {@link TestConstants#TABLE_ACCOUNT} left join 查询,关联条件
-	 * {@link Condition#COMPARATOR_GREATER}.
+	 * {@link CompareCondition#COMPARATOR_GREATER}.
 	 */
 	@Test
 	public void testLeftJoinAccountGreater() {
 		Field leftAccountNo = bankVoucher.filterByName(TestConstants.FIELD_ACCOUNT_NO);
 		Field rightAccountNo = account.filterByName(TestConstants.FIELD_ACCOUNT_NO);
 		cube.addDimension(Dimension.JOIN_TYPE_LEFT, account,
-				new Condition(leftAccountNo, rightAccountNo, Condition.COMPARATOR_GREATER));
+				new CompareCondition(leftAccountNo, rightAccountNo, CompareCondition.COMPARATOR_GREATER));
 		assertEquals(12, jdbcTemplate.queryForList(sqlTranslator.translate(cube)).size());
 	}
 
@@ -122,7 +122,7 @@ public class JooqSqlTranslatorTest extends BaseTest {
 	public void testInnerJoinAccount() {
 		Field leftAccountNo = bankVoucher.filterByName(TestConstants.FIELD_ACCOUNT_NO);
 		Field rightAccountNo = account.filterByName(TestConstants.FIELD_ACCOUNT_NO);
-		cube.addDimension(Dimension.JOIN_TYPE_INNER, account, new Condition(leftAccountNo, rightAccountNo));
+		cube.addDimension(Dimension.JOIN_TYPE_INNER, account, new CompareCondition(leftAccountNo, rightAccountNo));
 		assertEquals(1, jdbcTemplate.queryForList(sqlTranslator.translate(cube)).size());
 	}
 
@@ -134,7 +134,7 @@ public class JooqSqlTranslatorTest extends BaseTest {
 	public void testInnerJoinAccountWithJoinExpression() {
 		Field rightAccountNo = account.filterByName(TestConstants.FIELD_ACCOUNT_NO);
 		cube.addDimension(Dimension.JOIN_TYPE_INNER, account,
-				new Condition(new JoinExpression(bankVoucher, "concat(BANK_VOUCHER.ACCOUNT_NO,'1')"), rightAccountNo));
+				new CompareCondition(new JoinExpression(bankVoucher, "concat(BANK_VOUCHER.ACCOUNT_NO,'1')"), rightAccountNo));
 		assertEquals(0, jdbcTemplate.queryForList(sqlTranslator.translate(cube)).size());
 	}
 
@@ -146,10 +146,10 @@ public class JooqSqlTranslatorTest extends BaseTest {
 	public void testLeftJoinAccountAndCusBasicInfo() {
 		Field leftAccountNo = bankVoucher.filterByName(TestConstants.FIELD_ACCOUNT_NO);
 		Field rightAccountNo = account.filterByName(TestConstants.FIELD_ACCOUNT_NO);
-		cube.addDimension(Dimension.JOIN_TYPE_LEFT, account, new Condition(leftAccountNo, rightAccountNo));
+		cube.addDimension(Dimension.JOIN_TYPE_LEFT, account, new CompareCondition(leftAccountNo, rightAccountNo));
 		Field leftCusId = account.filterByName(TestConstants.FIELD_CUS_ID);
 		Field rightCusId = custBasicInfo.filterByName(TestConstants.FIELD_CUS_ID);
-		cube.addDimension(Dimension.JOIN_TYPE_LEFT, custBasicInfo, new Condition(leftCusId, rightCusId));
+		cube.addDimension(Dimension.JOIN_TYPE_LEFT, custBasicInfo, new CompareCondition(leftCusId, rightCusId));
 		assertEquals(2, jdbcTemplate.queryForList(sqlTranslator.translate(cube)).size());
 	}
 
@@ -161,10 +161,10 @@ public class JooqSqlTranslatorTest extends BaseTest {
 	public void testInnerJoinAccountAndCusBasicInfo() {
 		Field leftAccountNo = bankVoucher.filterByName(TestConstants.FIELD_ACCOUNT_NO);
 		Field rightAccountNo = account.filterByName(TestConstants.FIELD_ACCOUNT_NO);
-		cube.addDimension(Dimension.JOIN_TYPE_INNER, account, new Condition(leftAccountNo, rightAccountNo));
+		cube.addDimension(Dimension.JOIN_TYPE_INNER, account, new CompareCondition(leftAccountNo, rightAccountNo));
 		Field leftCusId = account.filterByName(TestConstants.FIELD_CUS_ID);
 		Field rightCusId = custBasicInfo.filterByName(TestConstants.FIELD_CUS_ID);
-		cube.addDimension(Dimension.JOIN_TYPE_INNER, custBasicInfo, new Condition(leftCusId, rightCusId));
+		cube.addDimension(Dimension.JOIN_TYPE_INNER, custBasicInfo, new CompareCondition(leftCusId, rightCusId));
 		assertEquals(0, jdbcTemplate.queryForList(sqlTranslator.translate(cube)).size());
 	}
 
