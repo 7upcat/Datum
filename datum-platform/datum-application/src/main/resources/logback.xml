@@ -3,7 +3,7 @@
     <!--  java -jar -Dmipha.log.dir=/home/ mipha.jar -->
 	<appender name="ROLLING"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>${mipha.log.dir:-.}/mipha.log</file>
+		<file>${datum.log.dir:-.}/datum-app.log</file>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
 			<fileNamePattern>mipha-%d{yyyy-MM-dd}.log</fileNamePattern>
 		</rollingPolicy>
