@@ -30,7 +30,6 @@ import org.datum.application.domain.Cube;
 import org.datum.application.olap.DataSet;
 import org.datum.application.olap.FieldLike;
 import org.datum.application.olap.TableLike;
-import org.datum.expression.dialect.Dialect;
 
 /**
  * 数据源元数据解析器.
@@ -65,14 +64,6 @@ public interface OLAPService<T extends TableLike, F extends FieldLike> {
 	 * @return 指定 table 下的栏位列表
 	 */
 	List<F> resolveFields(Connector connector, T table);
-
-	/**
-	 * 根据指定的 {@link Connector} 获取适合的 {@link Dialect}.
-	 * 
-	 * @param connector 连接器
-	 * @return 指定连接器适合的方言
-	 */
-	Dialect resolveDialect(Connector connector);
 
 	/**
 	 * 根据指定的 {@link Cube} 获取数据集.

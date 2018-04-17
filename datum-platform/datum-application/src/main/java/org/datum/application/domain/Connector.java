@@ -33,7 +33,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-import org.datum.application.infrastructure.jpa.JSONAttributeConverter;
+import org.datum.application.domain.support.MapAttributeConverter;
 
 /**
  * 连接器实体保存了元信息用于同某一个数据源进行连接.
@@ -62,7 +62,7 @@ public class Connector implements Serializable {
 	private String type;
 
 	@Column
-	@Convert(converter = JSONAttributeConverter.class)
+	@Convert(converter = MapAttributeConverter.class)
 	private Map<String, Object> metadatas = new HashMap<>();
 
 	@Column

@@ -21,23 +21,27 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.datum.application.service;
+package org.datum.application.domain.support;
 
-import org.datum.application.domain.Cube;
+import javax.persistence.AttributeConverter;
+
+import org.datum.application.util.JSONUtils;
 
 /**
- * SQL 语言的解释器.
+ * 属性转换器用于实体属性同数据库数据的转换.
  * 
  * @author 7cat
  * @since 1.0
  */
-public interface SQLTranslator {
+public class MapAttributeConverter implements AttributeConverter<Object, String> {
 
-	/**
-	 * 将 {@link Cube} 
-	 * 
-	 * @param cube OLAP 立方体
-	 * @return 此 cube 对应的查询语句
-	 */
-	String translate(Cube cube);
+	@Override
+	public String convertToDatabaseColumn(Object attribute) {
+		return JSONUtils.marshal(attribute);
+	}
+
+	@Override
+	public Object convertToEntityAttribute(String data) {
+		return JSONUtils.unmarshal(data);
+	}
 }

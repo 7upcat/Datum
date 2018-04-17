@@ -41,7 +41,6 @@ import org.datum.application.olap.PhysicalTable;
 import org.datum.application.olap.TableLike;
 import org.datum.application.service.OLAPService;
 import org.datum.application.test.BaseTest;
-import org.datum.expression.dialect.h2.H2Dialect;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,15 +65,14 @@ public class DatabaseOLAPServiceTest extends BaseTest {
 	private TableLike custBasicInfo;
 
 	private Cube cube;
-	
+
 	private Connector connector;
 
 	@Before
 	public void init() {
 		connector = ConnectorFactory.newSampleDBConnector();
 		connectorRepository.save(connector);
-		bankVoucher = olapService.resolveTable(connector,
-				PhysicalTable.newTable(TestConstants.TABLE_BANK_VOUCHER));
+		bankVoucher = olapService.resolveTable(connector, PhysicalTable.newTable(TestConstants.TABLE_BANK_VOUCHER));
 		account = olapService.resolveTable(connector, PhysicalTable.newTable(TestConstants.TABLE_ACCOUNT));
 		custBasicInfo = olapService.resolveTable(connector,
 				PhysicalTable.newTable(TestConstants.TABLE_CUST_BASIC_INFO));
@@ -147,10 +145,10 @@ public class DatabaseOLAPServiceTest extends BaseTest {
 		cube.addDimension(Dimension.JOIN_TYPE_LEFT, account, new CompareCondition(leftAccountNo, rightAccountNo));
 		Field leftCusId = account.filterByName(TestConstants.FIELD_CUS_ID);
 		Field rightCusId = custBasicInfo.filterByName(TestConstants.FIELD_CUS_ID);
-		
-		Condition condition = new ExpressionCondition(String.format("([%s] = [%s] AND 2=2);", new Object[] {
-			leftCusId.asField(), rightCusId.asField() }), olapService.resolveDialect(connector));
-		
+
+		Condition condition = new ExpressionCondition(
+				String.format("([%s] = [%s] AND 2=2);", new Object[] { leftCusId.asField(), rightCusId.asField() }));
+
 		cube.addDimension(Dimension.JOIN_TYPE_LEFT, custBasicInfo, condition);
 		assertEquals(2, olapService.fetchData(connector, cube).getDatas().size());
 	}
@@ -170,7 +168,6 @@ public class DatabaseOLAPServiceTest extends BaseTest {
 		assertEquals(0, olapService.fetchData(connector, cube).getDatas().size());
 	}
 
-	
 	@Test
 	public void testResolveTables() {
 		List<PhysicalTable> tables = olapService.resolveTables(ConnectorFactory.newSampleDBConnector());
@@ -185,11 +182,5 @@ public class DatabaseOLAPServiceTest extends BaseTest {
 		Field cusIdColumn = olapService.resolveFields(connector, table).stream().filter(
 				c -> TestConstants.FIELD_CUS_ID.equals(c.getColumnName())).findAny().get();
 		assertEquals(Types.CHAR, cusIdColumn.getDataType());
-	}
-
-	@Test
-	public void testResolveDialect() {
-		Connector connector = ConnectorFactory.newSampleDBConnector();
-		assertTrue(olapService.resolveDialect(connector) instanceof H2Dialect);
 	}
 }

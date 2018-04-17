@@ -40,17 +40,18 @@ public class ExpressionCondition implements Condition {
 
 	private String expression;
 
-	private Dialect dialect;
-
-	public ExpressionCondition(String expression, Dialect dialect) {
+	public ExpressionCondition(String expression) {
 		this.expression = expression;
-		this.dialect = dialect;
+	}
+
+	public void setExpression(String expression) {
+		this.expression = expression;
 	}
 
 	@Override
-	public org.jooq.Condition asCondition() {
+	public org.jooq.Condition asCondition(Dialect dialect) {
 		CalculationContext context = new CalculationContext();
-		context.setDialect(this.dialect);
+		context.setDialect(dialect);
 		return DSL.condition(calculationExpressionParser.eval(expression, context));
 	}
 }

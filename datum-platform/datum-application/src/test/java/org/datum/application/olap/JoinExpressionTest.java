@@ -21,7 +21,7 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.datum.application.domain;
+package org.datum.application.olap;
 
 import org.datum.application.common.TestConstants;
 import org.datum.application.domain.Connector;
@@ -51,7 +51,7 @@ public class JoinExpressionTest extends BaseTest {
 	@Autowired
 	private ConnectorRepository connectorRepository;
 
-	private OLAPService<PhysicalTable,Field> metadataResolver = new DatabaseOLAPService();
+	private OLAPService<PhysicalTable, Field> metadataResolver = new DatabaseOLAPService();
 
 	private JdbcTemplate jdbcTemplate;
 

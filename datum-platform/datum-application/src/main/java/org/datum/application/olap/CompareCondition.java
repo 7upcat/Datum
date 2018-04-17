@@ -23,6 +23,7 @@
 
 package org.datum.application.olap;
 
+import org.datum.expression.dialect.Dialect;
 import org.jooq.Comparator;
 
 /**
@@ -59,7 +60,7 @@ public class CompareCondition implements Condition {
 	}
 
 	@Override
-	public org.jooq.Condition asCondition() {
+	public org.jooq.Condition asCondition(Dialect dialect) {
 		return getLeft().asField().compare(Comparator.valueOf( getComparator()), getRight().asField());
 	}
 

@@ -119,6 +119,23 @@ public class DatabaseOLAPService implements OLAPService<PhysicalTable, Field> {
 		});
 	}
 
+	@Override
+	public DataSet<Field> fetchData(Connector connector, Cube cube) {
+		SelectJoinStep<Record> fact = using((DataSource) null, null).select(cube.getFields().stream().map((c) -> {
+			return field(c.asField()).as(c.getColumnNameAlias());
+		}).collect(Collectors.toList())).from(cube.getFact().getTableName());
+
+		cube.getDimensions().stream().forEach(d -> {
+			SelectOnStep<Record> joinStep = fact.join(table(d.getTarget().getTableName()),
+					joinTypesMapping.get(d.getType()));
+			Arrays.stream(d.getConditions()).forEach(c -> joinStep.on(c.asCondition(resolveDialect(connector))));
+		});
+
+		JdbcTemplate template = new JdbcTemplate(DBUtils.newDataSource(connector));
+		return new DataSet<Field>(cube.getFields(), template.queryForList(fact.getSQL()));
+	}
+	
+	
 	private <T> List<T> extractDataSet(ResultSet resultSet, Class<T> clazz) throws SQLException {
 		return new RowMapperResultSetExtractor<>(new BeanPropertyRowMapper<>(clazz)).extractData(resultSet);
 	}
@@ -133,8 +150,7 @@ public class DatabaseOLAPService implements OLAPService<PhysicalTable, Field> {
 		}
 	}
 
-	@Override
-	public Dialect resolveDialect(Connector connector) {
+	private  Dialect resolveDialect(Connector connector) {
 		return extractDatabaseMetaData(connector, (dbmd) -> {
 			DialectResolutionInfo info = new MetaDataDialectResolutionInfo(dbmd);
 			for (Database database : Database.values()) {
@@ -145,21 +161,5 @@ public class DatabaseOLAPService implements OLAPService<PhysicalTable, Field> {
 			}
 			throw new DatumCoreException(ErrorCodes.DIALECT_NOT_FOUND);
 		});
-	}
-
-	@Override
-	public DataSet<Field> fetchData(Connector connector, Cube cube) {
-		SelectJoinStep<Record> fact = using((DataSource) null, null).select(cube.getFields().stream().map((c) -> {
-			return field(c.asField()).as(c.getColumnNameAlias());
-		}).collect(Collectors.toList())).from(cube.getFact().getTableName());
-
-		cube.getDimensions().stream().forEach(d -> {
-			SelectOnStep<Record> joinStep = fact.join(table(d.getTarget().getTableName()),
-					joinTypesMapping.get(d.getType()));
-			Arrays.stream(d.getConditions()).forEach(c -> joinStep.on(c.asCondition()));
-		});
-
-		JdbcTemplate template = new JdbcTemplate(DBUtils.newDataSource(connector));
-		return new DataSet<Field>(cube.getFields(), template.queryForList(fact.getSQL()));
 	}
 }

@@ -47,6 +47,7 @@ public class Dimension {
 	public Dimension() {
 	}
 
+	@SafeVarargs
 	public Dimension(String type, TableLike table, Condition... conditions) {
 		this.type = type;
 		this.target = table;
