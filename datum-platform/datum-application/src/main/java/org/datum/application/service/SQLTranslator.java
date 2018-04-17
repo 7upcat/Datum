@@ -21,29 +21,23 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.datum.application.factory;
+package org.datum.application.service;
 
-import org.datum.application.common.Fields;
-import org.datum.application.common.TestConstants;
-import org.datum.application.domain.Connector;
+import org.datum.application.domain.Cube;
 
 /**
- * {@link Connector} 工厂用于构建单元测试中的使用的连接器.
+ * SQL 语言的解释器.
  * 
  * @author 7cat
  * @since 1.0
  */
-public final class ConnectorFactory {
+public interface SQLTranslator {
 
-	public static Connector newSampleDBConnector() {
-		Connector connector = new Connector();
-		connector.setName(TestConstants.SAMPLE_DB_NAME);
-		connector.setType(Connector.CONNECTOR_TYPE_DB);
-		connector.setDescribe(" A sample h2 memory db.");
-		connector.addMetadata(Fields.JDBC_DRIVER, TestConstants.SAMPLE_DB_JDBC_DRIVER);
-		connector.addMetadata(Fields.JDBC_URL, TestConstants.SAMPLE_DB_JDBC_URL);
-		connector.addMetadata(Fields.JDBC_USERNAME, TestConstants.SAMPLE_DB_JDBC_USERNAME);
-		connector.addMetadata(Fields.JDBC_PASSWORD, TestConstants.SAMPLE_DB_JDBC_PASSWPRD);
-		return connector;
-	}
+	/**
+	 * 将 {@link Cube} 
+	 * 
+	 * @param cube OLAP 立方体
+	 * @return 此 cube 对应的查询语句
+	 */
+	String translate(Cube cube);
 }

@@ -30,7 +30,8 @@ import javax.sql.DataSource;
 import org.datum.DatumCoreException;
 import org.datum.application.common.ErrorCodes;
 import org.datum.application.common.Fields;
-import org.datum.application.olap.domain.Connector;
+import org.datum.application.domain.Connector;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 
 /**
@@ -58,5 +59,9 @@ public final class DBUtils {
 			throw new DatumCoreException(ErrorCodes.DRIVER_CLASS_NOT_FOUND, driver, e);
 		}
 
+	}
+	
+	public static JdbcTemplate newJdbcTemplate(Connector connector) {
+		return new JdbcTemplate(newDataSource(connector));
 	}
 }

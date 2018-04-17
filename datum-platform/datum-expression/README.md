@@ -1,11 +1,13 @@
 # datum-expression
 
-*datum-expression* (Datum Calculation Expression Language) 是 [Datum](https://github.com/CodingToy/Datum) 内置的求值表达式语言(DSL).
+*datum-expression* 是 [Datum](https://github.com/CodingToy/Datum) 内置的求值表达式语言.
 
 * **Easy Yet Powerful**: 非技术人员也很容易学习使用.
 * **Lean Once Use Anywhere**: 各类数据源(SQL、NOSQL、BigData、Excel等等) 都具有一致的求值运算语法.
 
 ## 场景
+
+- 
 
 ## 语法
 

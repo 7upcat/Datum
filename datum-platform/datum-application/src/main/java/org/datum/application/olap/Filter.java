@@ -21,29 +21,13 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.datum.application.factory;
+package org.datum.application.olap;
 
-import org.datum.application.common.Fields;
-import org.datum.application.common.TestConstants;
-import org.datum.application.domain.Connector;
 
 /**
- * {@link Connector} 工厂用于构建单元测试中的使用的连接器.
- * 
  * @author 7cat
  * @since 1.0
  */
-public final class ConnectorFactory {
+public class Filter {
 
-	public static Connector newSampleDBConnector() {
-		Connector connector = new Connector();
-		connector.setName(TestConstants.SAMPLE_DB_NAME);
-		connector.setType(Connector.CONNECTOR_TYPE_DB);
-		connector.setDescribe(" A sample h2 memory db.");
-		connector.addMetadata(Fields.JDBC_DRIVER, TestConstants.SAMPLE_DB_JDBC_DRIVER);
-		connector.addMetadata(Fields.JDBC_URL, TestConstants.SAMPLE_DB_JDBC_URL);
-		connector.addMetadata(Fields.JDBC_USERNAME, TestConstants.SAMPLE_DB_JDBC_USERNAME);
-		connector.addMetadata(Fields.JDBC_PASSWORD, TestConstants.SAMPLE_DB_JDBC_PASSWPRD);
-		return connector;
-	}
 }

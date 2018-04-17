@@ -21,29 +21,27 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.datum.application.factory;
+package org.datum.application.infrastructure.jpa;
 
-import org.datum.application.common.Fields;
-import org.datum.application.common.TestConstants;
-import org.datum.application.domain.Connector;
+import javax.persistence.AttributeConverter;
+
+import org.datum.application.util.JSONUtils;
 
 /**
- * {@link Connector} 工厂用于构建单元测试中的使用的连接器.
+ * 属性转换器用于实体属性同数据库数据的转换.
  * 
  * @author 7cat
  * @since 1.0
  */
-public final class ConnectorFactory {
+public class JSONAttributeConverter implements AttributeConverter<Object, String> {
 
-	public static Connector newSampleDBConnector() {
-		Connector connector = new Connector();
-		connector.setName(TestConstants.SAMPLE_DB_NAME);
-		connector.setType(Connector.CONNECTOR_TYPE_DB);
-		connector.setDescribe(" A sample h2 memory db.");
-		connector.addMetadata(Fields.JDBC_DRIVER, TestConstants.SAMPLE_DB_JDBC_DRIVER);
-		connector.addMetadata(Fields.JDBC_URL, TestConstants.SAMPLE_DB_JDBC_URL);
-		connector.addMetadata(Fields.JDBC_USERNAME, TestConstants.SAMPLE_DB_JDBC_USERNAME);
-		connector.addMetadata(Fields.JDBC_PASSWORD, TestConstants.SAMPLE_DB_JDBC_PASSWPRD);
-		return connector;
+	@Override
+	public String convertToDatabaseColumn(Object attribute) {
+		return JSONUtils.marshal(attribute);
+	}
+
+	@Override
+	public Object convertToEntityAttribute(String data) {
+		return JSONUtils.unmarshal(data);
 	}
 }

@@ -24,8 +24,6 @@
 package org.datum.application.domain;
 
 import org.datum.application.factory.ConnectorFactory;
-import org.datum.application.olap.domain.Connector;
-import org.datum.application.olap.domain.ConnectorRepository;
 import org.datum.application.test.BaseTest;
 import org.junit.After;
 import org.junit.Assert;

@@ -21,30 +21,50 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.datum.application.util;
+package org.datum.application.domain;
 
-import java.sql.SQLException;
-
+import org.datum.application.common.TestConstants;
 import org.datum.application.domain.Connector;
+import org.datum.application.domain.ConnectorRepository;
 import org.datum.application.factory.ConnectorFactory;
+import org.datum.application.olap.Field;
+import org.datum.application.olap.JoinExpression;
+import org.datum.application.olap.PhysicalTable;
+import org.datum.application.olap.TableLike;
+import org.datum.application.service.OLAPService;
+import org.datum.application.service.impl.DatabaseOLAPService;
+import org.datum.application.test.BaseTest;
 import org.datum.application.util.DBUtils;
-import org.junit.Assert;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 /**
- * {@link DBUtils} 的单元测试案例.
+ * 单元测试验证 {@link JoinExpression} .
  * 
  * @author 7cat
  * @since 1.0
  */
-public class DBUtilsTest {
+
+public class JoinExpressionTest extends BaseTest {
+
+	@Autowired
+	private ConnectorRepository connectorRepository;
+
+	private OLAPService<PhysicalTable,Field> metadataResolver = new DatabaseOLAPService();
+
+	private JdbcTemplate jdbcTemplate;
 
 	@Test
-	public void testNewDataSource() throws SQLException {
+	public void test() {
 		Connector connector = ConnectorFactory.newSampleDBConnector();
-		JdbcTemplate template = new JdbcTemplate(DBUtils.newDataSource(connector));
-		Integer number = template.queryForObject("SELECT 1", Integer.class);
-		Assert.assertEquals(new Integer(1), number);
+		connectorRepository.save(connector);
+		jdbcTemplate = new JdbcTemplate(DBUtils.newDataSource(connector));
+		TableLike custBasicInfo = metadataResolver.resolveTable(connector,
+				PhysicalTable.newTable(TestConstants.TABLE_CUST_BASIC_INFO));
+		JoinExpression expression = new JoinExpression();
+		expression.setExpression("concat(CUST_BASIC_INFO.ID_TYPE , CUST_BASIC_INFO.ID_NO)");
+		expression.setTable(custBasicInfo);
+		jdbcTemplate.execute(expression.validationSql());
 	}
 }

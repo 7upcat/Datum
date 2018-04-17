@@ -21,29 +21,41 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.datum.application.factory;
+package org.datum.application.olap;
 
-import org.datum.application.common.Fields;
-import org.datum.application.common.TestConstants;
-import org.datum.application.domain.Connector;
+import java.util.List;
+import java.util.Map;
 
 /**
- * {@link Connector} 工厂用于构建单元测试中的使用的连接器.
  * 
  * @author 7cat
  * @since 1.0
  */
-public final class ConnectorFactory {
+public class DataSet<T extends FieldLike> {
 
-	public static Connector newSampleDBConnector() {
-		Connector connector = new Connector();
-		connector.setName(TestConstants.SAMPLE_DB_NAME);
-		connector.setType(Connector.CONNECTOR_TYPE_DB);
-		connector.setDescribe(" A sample h2 memory db.");
-		connector.addMetadata(Fields.JDBC_DRIVER, TestConstants.SAMPLE_DB_JDBC_DRIVER);
-		connector.addMetadata(Fields.JDBC_URL, TestConstants.SAMPLE_DB_JDBC_URL);
-		connector.addMetadata(Fields.JDBC_USERNAME, TestConstants.SAMPLE_DB_JDBC_USERNAME);
-		connector.addMetadata(Fields.JDBC_PASSWORD, TestConstants.SAMPLE_DB_JDBC_PASSWPRD);
-		return connector;
+	private List<T> fields;
+
+	private List<Map<String, Object>> datas;
+
+	public DataSet(List<T> fields, List<Map<String, Object>> datas) {
+		this.fields = fields;
+		this.datas = datas;
 	}
+
+	public List<Map<String, Object>> getDatas() {
+		return datas;
+	}
+
+	public void setDatas(List<Map<String, Object>> datas) {
+		this.datas = datas;
+	}
+
+	public List<T> getFields() {
+		return fields;
+	}
+
+	public void setFields(List<T> fields) {
+		this.fields = fields;
+	}
+
 }

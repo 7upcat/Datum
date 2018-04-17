@@ -21,29 +21,66 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.datum.application.factory;
-
-import org.datum.application.common.Fields;
-import org.datum.application.common.TestConstants;
-import org.datum.application.domain.Connector;
+package org.datum.application.olap;
 
 /**
- * {@link Connector} 工厂用于构建单元测试中的使用的连接器.
+ * 值对象,同事实表相关联
+ * <ul>
+ * <li>Inner Join</li>
+ * <li>Left Outer Join</li>
+ * <li>Right Outer Join</li>
+ * </ul>
+ * 
+ * 对于较多的数据库产品目前不支持 Full Outer Join 因此暂不支持.
  * 
  * @author 7cat
  * @since 1.0
  */
-public final class ConnectorFactory {
+public class Dimension {
 
-	public static Connector newSampleDBConnector() {
-		Connector connector = new Connector();
-		connector.setName(TestConstants.SAMPLE_DB_NAME);
-		connector.setType(Connector.CONNECTOR_TYPE_DB);
-		connector.setDescribe(" A sample h2 memory db.");
-		connector.addMetadata(Fields.JDBC_DRIVER, TestConstants.SAMPLE_DB_JDBC_DRIVER);
-		connector.addMetadata(Fields.JDBC_URL, TestConstants.SAMPLE_DB_JDBC_URL);
-		connector.addMetadata(Fields.JDBC_USERNAME, TestConstants.SAMPLE_DB_JDBC_USERNAME);
-		connector.addMetadata(Fields.JDBC_PASSWORD, TestConstants.SAMPLE_DB_JDBC_PASSWPRD);
-		return connector;
+	public static final String JOIN_TYPE_INNER = "I";
+
+	public static final String JOIN_TYPE_LEFT = "L";
+
+	public static final String JOIN_TYPE_RIGHT = "R";
+
+	public Dimension() {
 	}
+
+	public Dimension(String type, TableLike table, Condition... conditions) {
+		this.type = type;
+		this.target = table;
+		this.conditions = conditions;
+	}
+
+	private String type;
+
+	private TableLike target;
+
+	private Condition[] conditions;
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public TableLike getTarget() {
+		return target;
+	}
+
+	public void setTarget(TableLike target) {
+		this.target = target;
+	}
+
+	public Condition[] getConditions() {
+		return conditions;
+	}
+
+	public void setConditions(Condition[] conditions) {
+		this.conditions = conditions;
+	}
+
 }

@@ -21,29 +21,44 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.datum.application.factory;
+package org.datum.application.util;
 
-import org.datum.application.common.Fields;
-import org.datum.application.common.TestConstants;
-import org.datum.application.domain.Connector;
+import java.io.IOException;
+import java.util.Map;
 
-/**
- * {@link Connector} 工厂用于构建单元测试中的使用的连接器.
- * 
- * @author 7cat
- * @since 1.0
- */
-public final class ConnectorFactory {
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-	public static Connector newSampleDBConnector() {
-		Connector connector = new Connector();
-		connector.setName(TestConstants.SAMPLE_DB_NAME);
-		connector.setType(Connector.CONNECTOR_TYPE_DB);
-		connector.setDescribe(" A sample h2 memory db.");
-		connector.addMetadata(Fields.JDBC_DRIVER, TestConstants.SAMPLE_DB_JDBC_DRIVER);
-		connector.addMetadata(Fields.JDBC_URL, TestConstants.SAMPLE_DB_JDBC_URL);
-		connector.addMetadata(Fields.JDBC_USERNAME, TestConstants.SAMPLE_DB_JDBC_USERNAME);
-		connector.addMetadata(Fields.JDBC_PASSWORD, TestConstants.SAMPLE_DB_JDBC_PASSWPRD);
-		return connector;
+public final class JSONUtils {
+
+	public static String marshal(Object data) {
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+			return mapper.writeValueAsString(data);
+		}
+		catch (JsonProcessingException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static Map<String, Object> unmarshal(String data) {
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+			return mapper.readValue(data, Map.class);
+		}
+		catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public static <T> T unmarshal(String data, Class<T> clazz) {
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+			return mapper.readValue(data, clazz);
+		}
+		catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 }

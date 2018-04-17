@@ -21,29 +21,55 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.datum.application.factory;
+package org.datum.application.olap;
 
-import org.datum.application.common.Fields;
-import org.datum.application.common.TestConstants;
-import org.datum.application.domain.Connector;
+import org.jooq.Field;
+import org.jooq.impl.DSL;
+
+import static org.jooq.impl.DSL.*;
 
 /**
- * {@link Connector} 工厂用于构建单元测试中的使用的连接器.
+ * 表关联的求值表达式.
  * 
  * @author 7cat
  * @since 1.0
  */
-public final class ConnectorFactory {
+public class JoinExpression implements FieldLike {
 
-	public static Connector newSampleDBConnector() {
-		Connector connector = new Connector();
-		connector.setName(TestConstants.SAMPLE_DB_NAME);
-		connector.setType(Connector.CONNECTOR_TYPE_DB);
-		connector.setDescribe(" A sample h2 memory db.");
-		connector.addMetadata(Fields.JDBC_DRIVER, TestConstants.SAMPLE_DB_JDBC_DRIVER);
-		connector.addMetadata(Fields.JDBC_URL, TestConstants.SAMPLE_DB_JDBC_URL);
-		connector.addMetadata(Fields.JDBC_USERNAME, TestConstants.SAMPLE_DB_JDBC_USERNAME);
-		connector.addMetadata(Fields.JDBC_PASSWORD, TestConstants.SAMPLE_DB_JDBC_PASSWPRD);
-		return connector;
+	private TableLike table;
+
+	private String expression;
+	
+	public JoinExpression() {
+	}
+
+	public JoinExpression(TableLike table, String expression) {
+		this.table = table;
+		this.expression = expression;
+	}
+
+	@Override
+	public Field<Object> asField() {
+		return field(expression);
+	}
+
+	public String validationSql() {
+		return select(asField()).from(table(table.getTableName())).where(DSL.falseCondition()).getSQL();
+	}
+
+	public String getExpression() {
+		return expression;
+	}
+
+	public void setExpression(String expression) {
+		this.expression = expression;
+	}
+
+	public TableLike getTable() {
+		return table;
+	}
+
+	public void setTable(TableLike table) {
+		this.table = table;
 	}
 }

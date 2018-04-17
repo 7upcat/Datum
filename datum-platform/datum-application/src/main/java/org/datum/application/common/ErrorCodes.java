@@ -32,15 +32,18 @@ public final class ErrorCodes {
 
 	// ----------------------------------------------数据源模块 01
 
-	/** 响应码：JDBC 驱动类无法加载. */
+	/** JDBC 驱动类无法加载. */
 	public static final String DRIVER_CLASS_NOT_FOUND = "ERAP0101";
 
-	/** 响应码：无法连接数据库. */
+	/** 无法连接数据库. */
 	public static final String CONNECT_DB_FAIL = "ERAP0102";
 
-	/** 响应码：无法正常提取数据库表元信息. */
+	/** 无法正常提取数据库表元信息. */
 	public static final String EXTRACT_TABLE_METADATA_ERROR = "ERAP0103";
 
-	/** 响应码：数据源连接器不存在. */
+	/** 数据源连接器不存在. */
 	public static final String CONNECTOR_NOT_FOUND = "ERAP0104";
+	
+	/** 无适用的求值表达式方言. */
+	public static final String DIALECT_NOT_FOUND = "ERAP0105";
 }

@@ -27,7 +27,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.sql.Connection;
 
-import org.datum.application.olap.domain.Connector;
+import org.datum.application.domain.Connector;
 import org.datum.application.util.DBUtils;
 import org.h2.tools.RunScript;
 import org.springframework.core.io.ClassPathResource;

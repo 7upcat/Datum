@@ -21,40 +21,36 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.datum.application;
+package org.datum.application.olap;
 
-import javax.sql.DataSource;
-
-import org.apache.tomcat.jdbc.pool.PoolProperties;
+import org.datum.expression.CalculationContext;
 import org.datum.expression.CalculationExpressionParser;
 import org.datum.expression.SqlCalculationExpressionParser;
-import org.springframework.boot.WebApplicationType;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Bean;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.datum.expression.dialect.Dialect;
+import org.jooq.impl.DSL;
 
-@SpringBootApplication
-public class Application implements WebMvcConfigurer {
+/**
+ * 支持 datum-expression 的条件.
+ * 
+ * @author 7cat
+ */
+public class ExpressionCondition implements Condition {
 
-	@Bean
-	public DataSource dataSource() {
-		return new org.apache.tomcat.jdbc.pool.DataSource(poolProperties());
+	private CalculationExpressionParser<String> calculationExpressionParser = new SqlCalculationExpressionParser();
+
+	private String expression;
+
+	private Dialect dialect;
+
+	public ExpressionCondition(String expression, Dialect dialect) {
+		this.expression = expression;
+		this.dialect = dialect;
 	}
 
-	@Bean
-	public CalculationExpressionParser<String> expressionParser() {
-		return new SqlCalculationExpressionParser();
-	}
-
-	@Bean
-	@ConfigurationProperties(prefix = "datum.datasource")
-	public PoolProperties poolProperties() {
-		return new PoolProperties();
-	}
-
-	public static void main(String[] args) throws Exception {
-		new SpringApplicationBuilder(Application.class).web(WebApplicationType.SERVLET).run(args);
+	@Override
+	public org.jooq.Condition asCondition() {
+		CalculationContext context = new CalculationContext();
+		context.setDialect(this.dialect);
+		return DSL.condition(calculationExpressionParser.eval(expression, context));
 	}
 }
