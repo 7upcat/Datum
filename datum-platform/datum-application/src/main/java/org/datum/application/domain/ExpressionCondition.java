@@ -21,39 +21,37 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.datum.application.olap;
+package org.datum.application.domain;
+
+import org.datum.expression.CalculationContext;
+import org.datum.expression.CalculationExpressionParser;
+import org.datum.expression.SqlCalculationExpressionParser;
+import org.datum.expression.dialect.Dialect;
+import org.jooq.impl.DSL;
 
 /**
- * 物理的表和视图.
+ * 支持 datum-expression 的条件.
  * 
  * @author 7cat
- * @since 1.0
  */
-public class PhysicalTable extends TableLike {
+public class ExpressionCondition implements Condition {
 
-	private String tableCatalog;
+	private CalculationExpressionParser<String> calculationExpressionParser = new SqlCalculationExpressionParser();
 
-	private String tableSchema;
+	private String expression;
 
-	public static PhysicalTable newTable(String tableName) {
-		PhysicalTable table = new PhysicalTable();
-		table.setTableName(tableName);
-		return table;
+	public ExpressionCondition(String expression) {
+		this.expression = expression;
 	}
 
-	public String getTableCatalog() {
-		return tableCatalog;
+	public void setExpression(String expression) {
+		this.expression = expression;
 	}
 
-	public void setTableCatalog(String tableCatalog) {
-		this.tableCatalog = tableCatalog;
-	}
-
-	public String getTableSchema() {
-		return tableSchema;
-	}
-
-	public void setTableSchema(String tableSchema) {
-		this.tableSchema = tableSchema;
+	@Override
+	public org.jooq.Condition asCondition(Dialect dialect) {
+		CalculationContext context = new CalculationContext();
+		context.setDialect(dialect);
+		return DSL.condition(calculationExpressionParser.eval(expression, context));
 	}
 }

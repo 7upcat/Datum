@@ -21,41 +21,67 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.datum.application.olap;
-
-import java.util.List;
-import java.util.Map;
+package org.datum.application.domain;
 
 /**
+ * 值对象,同事实表相关联
+ * <ul>
+ * <li>Inner Join</li>
+ * <li>Left Outer Join</li>
+ * <li>Right Outer Join</li>
+ * </ul>
+ * 
+ * 对于较多的数据库产品目前不支持 Full Outer Join 因此暂不支持.
  * 
  * @author 7cat
  * @since 1.0
  */
-public class DataSet<T extends FieldLike> {
+public class Dimension {
 
-	private List<T> fields;
+	public static final String JOIN_TYPE_INNER = "I";
 
-	private List<Map<String, Object>> datas;
+	public static final String JOIN_TYPE_LEFT = "L";
 
-	public DataSet(List<T> fields, List<Map<String, Object>> datas) {
-		this.fields = fields;
-		this.datas = datas;
+	public static final String JOIN_TYPE_RIGHT = "R";
+
+	public Dimension() {
 	}
 
-	public List<Map<String, Object>> getDatas() {
-		return datas;
+	@SafeVarargs
+	public Dimension(String type, TableLike table, Condition... conditions) {
+		this.type = type;
+		this.target = table;
+		this.conditions = conditions;
 	}
 
-	public void setDatas(List<Map<String, Object>> datas) {
-		this.datas = datas;
+	private String type;
+
+	private TableLike target;
+
+	private Condition[] conditions;
+
+	public String getType() {
+		return type;
 	}
 
-	public List<T> getFields() {
-		return fields;
+	public void setType(String type) {
+		this.type = type;
 	}
 
-	public void setFields(List<T> fields) {
-		this.fields = fields;
+	public TableLike getTarget() {
+		return target;
+	}
+
+	public void setTarget(TableLike target) {
+		this.target = target;
+	}
+
+	public Condition[] getConditions() {
+		return conditions;
+	}
+
+	public void setConditions(Condition[] conditions) {
+		this.conditions = conditions;
 	}
 
 }

@@ -21,23 +21,41 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.datum.application.olap;
+package org.datum.application.domain;
+
+import java.util.List;
+import java.util.Map;
 
 /**
- * 基于查询结果的临时表.
  * 
  * @author 7cat
  * @since 1.0
  */
-public class QueryTable extends TableLike {
+public class DataSet<T extends FieldLike> {
 
-	private String statement;
+	private List<T> fields;
 
-	public String getStatement() {
-		return statement;
+	private List<Map<String, Object>> datas;
+
+	public DataSet(List<T> fields, List<Map<String, Object>> datas) {
+		this.fields = fields;
+		this.datas = datas;
 	}
 
-	public void setStatement(String statement) {
-		this.statement = statement;
+	public List<Map<String, Object>> getDatas() {
+		return datas;
 	}
+
+	public void setDatas(List<Map<String, Object>> datas) {
+		this.datas = datas;
+	}
+
+	public List<T> getFields() {
+		return fields;
+	}
+
+	public void setFields(List<T> fields) {
+		this.fields = fields;
+	}
+
 }

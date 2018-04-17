@@ -27,9 +27,9 @@ import java.util.List;
 
 import org.datum.application.domain.Connector;
 import org.datum.application.domain.Cube;
-import org.datum.application.olap.DataSet;
-import org.datum.application.olap.FieldLike;
-import org.datum.application.olap.TableLike;
+import org.datum.application.domain.DataSet;
+import org.datum.application.domain.FieldLike;
+import org.datum.application.domain.TableLike;
 
 /**
  * 数据源元数据解析器.

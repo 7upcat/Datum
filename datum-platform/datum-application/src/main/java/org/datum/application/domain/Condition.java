@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.datum.application.olap;
+package org.datum.application.domain;
 
 import org.datum.expression.dialect.Dialect;
 

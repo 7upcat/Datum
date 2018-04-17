@@ -1,0 +1,10 @@
+datum: 
+  datasource:
+    url: jdbc:h2:mem:mipha
+    username:
+    password:
+    
+spring: 
+  jpa:
+    hibernate:
+      ddl-auto: create

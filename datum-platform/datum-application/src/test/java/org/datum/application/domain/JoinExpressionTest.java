@@ -21,16 +21,16 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.datum.application.olap;
+package org.datum.application.domain;
 
 import org.datum.application.common.TestConstants;
 import org.datum.application.domain.Connector;
 import org.datum.application.domain.ConnectorRepository;
+import org.datum.application.domain.Field;
+import org.datum.application.domain.JoinExpression;
+import org.datum.application.domain.PhysicalTable;
+import org.datum.application.domain.TableLike;
 import org.datum.application.factory.ConnectorFactory;
-import org.datum.application.olap.Field;
-import org.datum.application.olap.JoinExpression;
-import org.datum.application.olap.PhysicalTable;
-import org.datum.application.olap.TableLike;
 import org.datum.application.service.OLAPService;
 import org.datum.application.service.impl.DatabaseOLAPService;
 import org.datum.application.test.BaseTest;

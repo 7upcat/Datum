@@ -29,12 +29,6 @@ import java.util.List;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-import org.datum.application.olap.Condition;
-import org.datum.application.olap.Dimension;
-import org.datum.application.olap.Field;
-import org.datum.application.olap.Filter;
-import org.datum.application.olap.TableLike;
-
 /**
  * 多维数据分析立方体实体，包含了一个 {@link #fact} 及多个 {@link #dimensions} .
  * 

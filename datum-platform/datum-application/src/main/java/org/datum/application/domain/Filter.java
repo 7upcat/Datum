@@ -21,55 +21,13 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.datum.application.olap;
+package org.datum.application.domain;
 
-import org.jooq.Field;
-import org.jooq.impl.DSL;
-
-import static org.jooq.impl.DSL.*;
 
 /**
- * 表关联的求值表达式.
- * 
  * @author 7cat
  * @since 1.0
  */
-public class JoinExpression implements FieldLike {
+public class Filter {
 
-	private TableLike table;
-
-	private String expression;
-	
-	public JoinExpression() {
-	}
-
-	public JoinExpression(TableLike table, String expression) {
-		this.table = table;
-		this.expression = expression;
-	}
-
-	@Override
-	public Field<Object> asField() {
-		return field(expression);
-	}
-
-	public String validationSql() {
-		return select(asField()).from(table(table.getTableName())).where(DSL.falseCondition()).getSQL();
-	}
-
-	public String getExpression() {
-		return expression;
-	}
-
-	public void setExpression(String expression) {
-		this.expression = expression;
-	}
-
-	public TableLike getTable() {
-		return table;
-	}
-
-	public void setTable(TableLike table) {
-		this.table = table;
-	}
 }

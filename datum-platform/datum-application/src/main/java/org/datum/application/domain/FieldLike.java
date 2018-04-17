@@ -21,37 +21,15 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.datum.application.olap;
+package org.datum.application.domain;
 
-import org.datum.expression.CalculationContext;
-import org.datum.expression.CalculationExpressionParser;
-import org.datum.expression.SqlCalculationExpressionParser;
-import org.datum.expression.dialect.Dialect;
-import org.jooq.impl.DSL;
+import org.jooq.Field;
 
 /**
- * 支持 datum-expression 的条件.
- * 
  * @author 7cat
+ * @since 1.0
  */
-public class ExpressionCondition implements Condition {
+public interface FieldLike {
 
-	private CalculationExpressionParser<String> calculationExpressionParser = new SqlCalculationExpressionParser();
-
-	private String expression;
-
-	public ExpressionCondition(String expression) {
-		this.expression = expression;
-	}
-
-	public void setExpression(String expression) {
-		this.expression = expression;
-	}
-
-	@Override
-	public org.jooq.Condition asCondition(Dialect dialect) {
-		CalculationContext context = new CalculationContext();
-		context.setDialect(dialect);
-		return DSL.condition(calculationExpressionParser.eval(expression, context));
-	}
+	Field<Object> asField();
 }

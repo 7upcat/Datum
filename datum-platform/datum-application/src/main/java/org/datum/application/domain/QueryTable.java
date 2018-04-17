@@ -21,13 +21,23 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.datum.application.olap;
-
+package org.datum.application.domain;
 
 /**
+ * 基于查询结果的临时表.
+ * 
  * @author 7cat
  * @since 1.0
  */
-public class Filter {
+public class QueryTable extends TableLike {
 
+	private String statement;
+
+	public String getStatement() {
+		return statement;
+	}
+
+	public void setStatement(String statement) {
+		this.statement = statement;
+	}
 }
