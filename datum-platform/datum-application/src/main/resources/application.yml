@@ -16,13 +16,13 @@ spring:
   h2:
    console: 
     enabled: true
-    path: /h2-console
+    path: /db-console
     settings:
       web-allow-others: true
          
    
 datum: 
-  datasource: 
+  datasource:
     url: jdbc:h2:file:./db/datum
     username: datum
     password: datum

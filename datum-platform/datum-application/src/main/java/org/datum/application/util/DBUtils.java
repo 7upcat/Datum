@@ -42,6 +42,12 @@ import org.springframework.jdbc.datasource.SimpleDriverDataSource;
  */
 public final class DBUtils {
 
+	/**
+	 * 根据指定的连接器创建一个数据源.
+	 * 
+	 * @param connector 连接器
+	 * @return 连接器的数据源
+	 */
 	public static DataSource newDataSource(Connector connector) {
 		String driver = connector.getMetadata(Fields.JDBC_DRIVER);
 		String url = connector.getMetadata(Fields.JDBC_URL);
@@ -60,7 +66,13 @@ public final class DBUtils {
 		}
 
 	}
-	
+
+	/**
+	 * 根据指定的连接器创新一个 Spring {@link JdbcTemplate}.
+	 * 
+	 * @param connector 指定的连接器
+	 * @return 指定连接器的 {@link JdbcTemplate}
+	 */
 	public static JdbcTemplate newJdbcTemplate(Connector connector) {
 		return new JdbcTemplate(newDataSource(connector));
 	}

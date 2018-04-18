@@ -23,12 +23,13 @@
 
 package org.datum.application.web;
 
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 
  * @author 7cat
  * @since 1.0
  */
+@RestController
 public class ConnectorController {
-
 }
