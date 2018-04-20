@@ -1,4 +1,4 @@
-import { queryNotices } from '../services/api';
+import { queryNotices } from '../services/frame';
 
 export default {
   namespace: 'global',
@@ -51,17 +51,6 @@ export default {
         ...state,
         notices: state.notices.filter(item => item.type !== payload),
       };
-    },
-  },
-
-  subscriptions: {
-    setup({ history }) {
-      // Subscribe history(url) change, trigger `load` action if pathname is `/`
-      return history.listen(({ pathname, search }) => {
-        if (typeof window.ga !== 'undefined') {
-          window.ga('send', 'pageview', pathname + search);
-        }
-      });
     },
   },
 };

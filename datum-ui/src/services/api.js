@@ -1,28 +1,5 @@
-import { stringify } from 'qs';
-import request from '../utils/request';
+import request from '../framework/utils/request';
 
-export async function queryConnectors(params) {
+export async function queryConnectors() {
   return request('/api/analysis/connectors');
-}
-
-export async function queryProjectNotice() {
-  return request('/api/project/notice');
-}
- 
-export async function fakeAccountLogin(params) {
-  return request('/api/login/account', {
-    method: 'POST',
-    body: params,
-  });
-}
-
-export async function fakeRegister(params) {
-  return request('/api/register', {
-    method: 'POST',
-    body: params,
-  });
-}
-
-export async function queryNotices() {
-  return request('/api/notices');
 }
