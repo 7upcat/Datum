@@ -2,96 +2,31 @@ import { isUrl } from '../utils/utils';
 
 const menuData = [
   {
-    name: 'dashboard',
-    icon: 'dashboard',
-    path: 'dashboard',
+    name: '自助分析',
+    icon: 'bar-chart',
+    path: 'analysis',
     children: [
       {
-        name: '分析页',
-        path: 'analysis',
-      },
-      {
-        name: '监控页',
-        path: 'monitor',
-      },
-      {
-        name: '工作台',
-        path: 'workplace',
-        // hideInBreadcrumb: true,
-        // hideInMenu: true,
-      },
-    ],
-  },
-  {
-    name: '表单页',
-    icon: 'form',
-    path: 'form',
-    children: [
-      {
-        name: '基础表单',
-        path: 'basic-form',
-      },
-      {
-        name: '分步表单',
-        path: 'step-form',
-      },
-      {
-        name: '高级表单',
-        authority: 'admin',
-        path: 'advanced-form',
-      },
-    ],
-  },
-  {
-    name: '列表页',
-    icon: 'table',
-    path: 'list',
-    children: [
-      {
-        name: '查询表格',
-        path: 'table-list',
-      },
-      {
-        name: '标准列表',
-        path: 'basic-list',
-      },
-      {
-        name: '卡片列表',
-        path: 'card-list',
-      },
-      {
-        name: '搜索列表',
-        path: 'search',
+        name: '数据连接',
+        path: 'datasource',
         children: [
           {
-            name: '搜索列表（文章）',
-            path: 'articles',
+            name: '管理连接',
+            path: 'connector',
           },
           {
-            name: '搜索列表（项目）',
-            path: 'projects',
-          },
-          {
-            name: '搜索列表（应用）',
-            path: 'applications',
+            name: '管理元数据',
+            path: 'metadata',
           },
         ],
       },
-    ],
-  },
-  {
-    name: '详情页',
-    icon: 'profile',
-    path: 'profile',
-    children: [
       {
-        name: '基础详情页',
-        path: 'basic',
+        name: '数据探索',
+        path: 'exploration',
       },
       {
-        name: '高级详情页',
-        path: 'advanced',
-        authority: 'admin',
+        name: '工作空间',
+        path: 'workspace',
       },
     ],
   },
@@ -131,26 +66,6 @@ const menuData = [
         name: '触发异常',
         path: 'trigger',
         hideInMenu: true,
-      },
-    ],
-  },
-  {
-    name: '账户',
-    icon: 'user',
-    path: 'user',
-    authority: 'guest',
-    children: [
-      {
-        name: '登录',
-        path: 'login',
-      },
-      {
-        name: '注册',
-        path: 'register',
-      },
-      {
-        name: '注册结果',
-        path: 'register-result',
       },
     ],
   },

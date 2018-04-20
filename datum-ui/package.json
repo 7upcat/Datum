@@ -1,7 +1,7 @@
 {
-  "name": "ant-design-pro",
-  "version": "1.2.1",
-  "description": "An out-of-box UI solution for enterprise applications",
+  "name": "datum-ui",
+  "version": "1.0.0",
+  "description": "A Modern Business Intelligence and Analysis Platform.",
   "private": true,
   "scripts": {
     "precommit": "npm run lint-staged",
@@ -45,7 +45,6 @@
     "react-document-title": "^2.0.3",
     "react-dom": "^16.2.0",
     "react-fittext": "^1.0.0",
-    "rollbar": "^2.3.4",
     "url-polyfill": "^1.0.10"
   },
   "devDependencies": {

@@ -1,19 +1,19 @@
 # 服务器配置
-server:
+server: 
   port: 8080
   
 server: 
   context-path: /datum
 
 # 持久化及数据源配置
-spring:
-  jpa:
+spring: 
+  jpa: 
     open-in-view: true
     show-sql: true
     properties: 
       hibernate:
         format_sql: true
-  h2:
+  h2: 
    console: 
     enabled: true
     path: /db-console
@@ -22,7 +22,7 @@ spring:
          
    
 datum: 
-  datasource:
+  datasource: 
     url: jdbc:h2:file:./db/datum
     username: datum
     password: datum
